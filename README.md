@@ -10,3 +10,12 @@
 
     - Como um usuário interessado em animais pequenos eu quero poder filtar
     os animais exibidos de acordo com certas caracteríscas para facilitar minha busca.
+    
+    - Como um usuário do sistema que tomou uma decisão sobre qual pet eu desejo adotar eu quero 
+    poder contatar o dono de tal pet para que eu possa adotá-lo
+    
+    - Como um usuário do sistema que recentemente mudou de endereço eu quero poder
+    alterar meus dados cadastrais para que minhas informações fiquem atualizadas
+    
+    - Como um indivíduo interessado em utilizar a plataforma eu quero poder
+    cadastrar meus dados pessoais para que eu possa utilizar o sistema
