@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <regex>
 
 void Controller::handle_request(const char *buffer, int socket){
     std::string buff(buffer);
@@ -20,7 +21,7 @@ void Controller::handle_request(const char *buffer, int socket){
     iss >> buff;
     std::string filename = buff;
 
-    if(http_method == "POST")
+    if(filename == "/")
         filename = "/index.html";
 
     // Remove slash from header
