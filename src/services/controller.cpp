@@ -12,12 +12,16 @@ void Controller::handle_request(const char *buffer, int socket){
     std::cout << buff << std::endl;
     std::istringstream iss(buff);
 
+    // HTTP methods
     iss >> buff;
-    std::cout << buff << std::endl;
-    iss >> buff;
-    std::cout << buff << std::endl;
+    std::string http_method = buff;
 
+    // Filename
+    iss >> buff;
     std::string filename = buff;
+
+    if(http_method == "POST")
+        filename = "/index.html";
 
     // Remove slash from header
     filename.erase(0,1);
@@ -37,7 +41,6 @@ void Controller::handle_request(const char *buffer, int socket){
             file.get(ch);
             i++;
             helper_string += ch;
-            std::cout << ch << std::endl;
         }
 
     // Remove duplicate char at end of string
