@@ -1,4 +1,5 @@
 #include "../../include/services/controller.h"
+#include "../../include/services/sqlite3_db.h"
 #include <stdio.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -30,53 +31,6 @@ void Controller::handle_request(const char *buffer, int socket){
     } else {
         std::cout << "Opened database successfully" << std::endl;
     }
-
-    /* Create SQL statement */
-    // std::string sql = "CREATE TABLE COMPANY("  \
-    //     "ID INT PRIMARY KEY     NOT NULL," \
-    //     "NAME           TEXT    NOT NULL," \
-    //     "AGE            INT     NOT NULL," \
-    //     "ADDRESS        CHAR(50)," \
-    //     "SALARY         REAL );";
-
-    // /* Execute SQL statement */
-    // rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
-    
-    // if( rc != SQLITE_OK ){
-    //     std::cout << "SQL Error: " << zErrMsg << std::endl;
-    //     sqlite3_free(zErrMsg);
-    // } else {
-    //     std::cout << "Table created successfully" << std::endl;
-    // }
-
-    // std::string sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "  \
-    //      "VALUES (5, 'Joao Pedro', 20, 'Rua Dias Adorno, 52', 100000.00 );";
-
-    // rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
-    
-    // if( rc != SQLITE_OK ){
-    //     std::cout << "SQL Error: " << zErrMsg << std::endl;
-    //     sqlite3_free(zErrMsg);
-    // } else {
-    //     std::cout << "Records created successfully" << std::endl;
-    // }
-
-    const char* data = "Callback function called";
-
-    /* Create SQL statement */
-    std::string sql = "SELECT * from tracks";
-
-    /* Execute SQL statement */
-    rc = sqlite3_exec(db, sql.c_str(), callback, (void*)data, &zErrMsg);
-    
-    if( rc != SQLITE_OK ) {
-        std::cout << "SQL Error: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    } else {
-        std::cout << "Operation done successfully" << std::endl;
-    }
-
-    sqlite3_close(db);
 
     std::string buff(buffer);
     std::cout << buff << std::endl;
