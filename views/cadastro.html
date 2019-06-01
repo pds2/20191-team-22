@@ -7,7 +7,7 @@
     </head>
     <body>
         <h1>
-            <form method="post" action="index.html" enctype='multipart/form-data'>
+            <form method="post" action="index.html" > <!-- enctype='multipart/form-data' -->
                 <label for="name">Nome</label>
                 <input type="text" name="name">
                 <br>
@@ -17,6 +17,7 @@
                 <input type="file" name="fileToUpload" id="fileToUpload">
                 <br><br>
                 <input type="submit" value="Submit">
+                <input name="delete" style="display: none;" value="true">
             </form> 
         </h1>
     </body>
