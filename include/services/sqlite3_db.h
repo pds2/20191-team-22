@@ -15,8 +15,8 @@ class SQLite3DB : public SQLite3Interface {
         char *zErrMsg;
         int rc;
         const char* data;
-        static std::map<std::string, std::string> get_return_values;
-        static std::vector< std::map<std::string, std::string> > index_return_values;
+        static std::map<std::string, std::string> get_return_values();
+        static std::vector< std::map<std::string, std::string> > index_return_values();
     public:
         SQLite3DB();
 
