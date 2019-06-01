@@ -8,30 +8,8 @@
 #include <sstream>
 #include <fstream>
 #include <regex>
-#include <sqlite3.h>
-
-static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-   int i;
-   for(i = 0; i<argc; i++) {
-      printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-   }
-   printf("\n");
-   return 0;
-}
 
 void Controller::handle_request(const char *buffer, int socket){
-    sqlite3 *db;
-    char *zErrMsg = 0;
-    int rc;
-
-    rc = sqlite3_open("pethero.db", &db);
-
-    if( rc ) {
-        std::cout << "Can't open database!";
-    } else {
-        std::cout << "Opened database successfully" << std::endl;
-    }
-
     std::string buff(buffer);
     std::cout << buff << std::endl;
     std::istringstream iss(buff);

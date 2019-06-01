@@ -14,9 +14,6 @@ SQLite3DB::SQLite3DB(){
     } else {
         std::cout << "Abriu o banco com sucesso!" << std::endl;
     }
-
-    get_return_values = std::map<std::string, std::string>();
-    index_return_values = std::vector< std::map<std::string, std::string> >();
 }
 
 int SQLite3DB::callback(void *NotUsed, int argc, char **argv, char **azColName) {
@@ -31,7 +28,10 @@ int SQLite3DB::callback(void *NotUsed, int argc, char **argv, char **azColName) 
 int SQLite3DB::get_callback(void *NotUsed, int argc, char **argv, char **azColName) {
     int i;
     for(i = 0; i<argc; i++) {
-        get_return_values.insert(std::pair<std::string,std::string>(azColName[i], argv[i] ? argv[i] : "NULL"));
+        std::string colName(azColName[i]);
+        std::string colValue(argv[i] ? argv[i] : "NULL");
+
+        get_return_values.insert(std::pair<std::string,std::string>(colName, colValue));
     }
     return 0;
 }
@@ -41,7 +41,10 @@ int SQLite3DB::index_callback(void *NotUsed, int argc, char **argv, char **azCol
     std::map<std::string, std::string> helper_map;
 
     for(i = 0; i<argc; i++) {
-        helper_map.insert(std::pair<std::string,std::string>(azColName[i], argv[i] ? argv[i] : "NULL"));
+        std::string colName(azColName[i]);
+        std::string colValue(argv[i] ? argv[i] : "NULL");
+
+        helper_map.insert(std::pair<std::string,std::string>(colName, colValue));
     }
 
     index_return_values.push_back(helper_map);
@@ -52,7 +55,7 @@ std::vector< std::map<std::string, std::string> > SQLite3DB::index(std::string t
     index_return_values.clear();
     std::string sql = "SELECT * FROM " + table_name;
     
-    rc = sqlite3_exec(db, sql.c_str(), get_callback, (void*)data, &zErrMsg);
+    rc = sqlite3_exec(db, sql.c_str(), index_callback, (void*)data, &zErrMsg);
     if( rc != SQLITE_OK ){
         std::map<std::string, std::string> error_map;
 
