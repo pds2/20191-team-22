@@ -1,4 +1,5 @@
 #include "../../include/services/controller.h"
+#include "../../include/services/sqlite3_db.h"
 #include <stdio.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -7,7 +8,10 @@
 #include <sstream>
 #include <fstream>
 #include <regex>
+<<<<<<< HEAD
 #include <map>
+=======
+>>>>>>> 2c6ecd665f73b91cf656c53dc5eaeaa169e16c9e
 
 void Controller::handle_request(const char *buffer, int socket){
     std::string buff(buffer);
