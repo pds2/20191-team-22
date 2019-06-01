@@ -8,10 +8,7 @@
 #include <sstream>
 #include <fstream>
 #include <regex>
-<<<<<<< HEAD
 #include <map>
-=======
->>>>>>> 2c6ecd665f73b91cf656c53dc5eaeaa169e16c9e
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
    int i;
