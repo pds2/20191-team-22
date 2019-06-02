@@ -2,3 +2,5 @@ main
 *.vscode
 a.out
 *.gch
+a.out.dSYM/
+*.tmp

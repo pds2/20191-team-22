@@ -1,4 +1,5 @@
 #include "../../include/services/sqlite3_db.h"
+#include "../../include/services/table_return.h"
 
 #include <iostream>
 #include <sqlite3.h>
@@ -7,14 +8,9 @@
 #include <vector>
 #include <map>
 
-std::map<std::string, std::string> SQLite3DB::get_return_values(){
-    static std::map<std::string, std::string> get_return_values;
-    return get_return_values;
-}
-
-std::vector< std::map<std::string, std::string> > SQLite3DB::index_return_values(){
-    static std::vector< std::map<std::string, std::string> > index_return_values;
-    return index_return_values;
+TableReturn &SQLite3DB::return_table(){
+    static TableReturn table_return;
+    return table_return;
 }
 
 SQLite3DB::SQLite3DB(){
@@ -41,7 +37,9 @@ int SQLite3DB::get_callback(void *NotUsed, int argc, char **argv, char **azColNa
         std::string colName(azColName[i]);
         std::string colValue(argv[i] ? argv[i] : "NULL");
 
-        get_return_values().insert(std::pair<std::string,std::string>(colName, colValue));
+        TableReturn &table_return = return_table();
+
+        table_return.get_return_values.insert(std::pair<std::string,std::string>(colName, colValue));
     }
     return 0;
 }
@@ -57,12 +55,16 @@ int SQLite3DB::index_callback(void *NotUsed, int argc, char **argv, char **azCol
         helper_map.insert(std::pair<std::string,std::string>(colName, colValue));
     }
 
-    index_return_values().push_back(helper_map);
+    TableReturn &table_return = return_table();
+
+    table_return.index_return_values.push_back(helper_map);
     return 0;
 }
 
 std::vector< std::map<std::string, std::string> > SQLite3DB::index(std::string table_name){
-    index_return_values().clear();
+    TableReturn &table_return = return_table();
+
+    table_return.index_return_values.clear();
     std::string sql = "SELECT * FROM " + table_name;
     
     rc = sqlite3_exec(db, sql.c_str(), index_callback, (void*)data, &zErrMsg);
@@ -70,24 +72,26 @@ std::vector< std::map<std::string, std::string> > SQLite3DB::index(std::string t
         std::map<std::string, std::string> error_map;
 
         error_map["ERROR"] = zErrMsg;
-        index_return_values().push_back(error_map);
+        table_return.index_return_values.push_back(error_map);
         sqlite3_free(zErrMsg);
     }
 
-    return index_return_values();
+    return table_return.index_return_values;
 }
 
 std::map<std::string, std::string> SQLite3DB::get(std::string table_name, int id){
-    get_return_values().clear();
+    TableReturn &table_return = return_table();
+
+    table_return.get_return_values.clear();
     std::string sql = "SELECT * FROM " + table_name + " WHERE id = " + std::to_string(id);
 
     rc = sqlite3_exec(db, sql.c_str(), get_callback, (void*)data, &zErrMsg);
     if( rc != SQLITE_OK ){
-        get_return_values().insert(std::pair<std::string,std::string>("ERROR", zErrMsg));
+        table_return.get_return_values.insert(std::pair<std::string,std::string>("ERROR", zErrMsg));
         sqlite3_free(zErrMsg);
     }
 
-    return get_return_values();
+    return table_return.get_return_values;
 }
 
 bool SQLite3DB::create(std::string table_name, std::map<std::string, std::string> insert_params){

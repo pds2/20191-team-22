@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 #include "sqlite3_interface.h"
+#include "table_return.h"
 
 class SQLite3DB : public SQLite3Interface {
     private: 
@@ -15,10 +16,10 @@ class SQLite3DB : public SQLite3Interface {
         char *zErrMsg;
         int rc;
         const char* data;
-        static std::map<std::string, std::string> get_return_values();
-        static std::vector< std::map<std::string, std::string> > index_return_values();
     public:
         SQLite3DB();
+
+        static TableReturn &return_table();
 
         static int callback(void *NotUsed, int argc, char **argv, char **azColName);
         static int get_callback(void *NotUsed, int argc, char **argv, char **azColName);
