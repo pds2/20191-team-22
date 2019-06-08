@@ -79,6 +79,12 @@ bool SQLite3DB::create_tables(){
       "HEIGHT         FLOAT   NOT NULL," \ 
       "WEIGHT         FLOAT   NOT NULL," \ 
        ") WITHOUT ROWID; \
+       CREATE TABLE INTERESTS("  \
+      "USER_OID           INT    NOT NULL," \
+      "ANIMAL_OID         INT    NOT NULL," \
+      "FOREIGN KEY (USER_OID) REFERENCES users(oid)" \ 
+      "FOREIGN KEY (ANIMAL_OID) REFERENCES animals(oid)" \
+       ") WITHOUT ROWID; \
        ";
 
     rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);

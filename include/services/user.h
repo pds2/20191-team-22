@@ -21,9 +21,10 @@ protected:
     char _gender;
 public:
     static SQLite3DB _db;
+    User(int id, string name, string cpf, string email, string phone_number, string address, char gender);
 
-    std::vector<User> index();
-    User get(int id);
+    static std::vector<User> index();
+    static User get(int id);
     static bool create(std::map<std::string, std::string> insert_params);
     static bool update(std::map<std::string, std::string> update_params, int id);
     static bool destroy(int id);

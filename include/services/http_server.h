@@ -3,6 +3,8 @@
 
 #include <netinet/in.h>
 
+#include "sqlite3_db.h"
+
 class HttpServer {
     private:
         int server_fd, new_socket; long valread;
@@ -12,8 +14,6 @@ class HttpServer {
         HttpServer();
 
         void send_response();
-        
-
 };
 
 

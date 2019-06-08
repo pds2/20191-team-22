@@ -7,31 +7,30 @@
 #include <vector>
 #include <map>
 #include "sqlite3_db.h"
-#include "adopter.h"
 
-using namespace std;
+class User;
 
 class Animal {
 private:
     int _id;
-    string _name;
-    string _type;
-    string _color;
+    std::string _name;
+    std::string _type;
+    std::string _color;
     int _age;
     float _height;
     float _weight;
 
 public:
     static SQLite3DB _db;
-    Animal();
+    Animal(int id, std::string name, std::string type, std::string color, int age, float height, float weigth);
 
-    std::vector<Animal> index();
-    Animal get(int id);
+    static std::vector<Animal> index();
+    static Animal get(int id);
     static bool create(std::map<std::string, std::string> insert_params);
     static bool update(std::map<std::string, std::string> update_params, int id);
     static bool destroy(int id);
 
-    vector<Adopter> show_interested();
+    std::vector<User> show_interested();
 };
 
 #endif
