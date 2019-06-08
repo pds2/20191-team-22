@@ -61,6 +61,41 @@ int SQLite3DB::index_callback(void *NotUsed, int argc, char **argv, char **azCol
     return 0;
 }
 
+
+bool SQLite3DB::create_tables(){
+    std::string sql = "CREATE TABLE USERS("  \
+      "NAME           TEXT    NOT NULL," \
+      "CPF            TEXT    NOT NULL," \
+      "EMAIL          TEXT    NOT NULL," \
+      "PHONE_NUMBER   TEXT    NOT NULL," \
+      "ADDRESS        TEXT    NOT NULL," \ 
+      "GENDER         CHAR(1) NOT NULL," \ 
+       ") WITHOUT ROWID; \
+       CREATE TABLE ANIMALS("  \
+      "NAME           TEXT    NOT NULL," \
+      "TYPE           TEXT    NOT NULL," \
+      "COLOR          TEXT    NOT NULL," \
+      "AGE            INT     NOT NULL," \
+      "HEIGHT         FLOAT   NOT NULL," \ 
+      "WEIGHT         FLOAT   NOT NULL," \ 
+       ") WITHOUT ROWID; \
+       CREATE TABLE INTERESTS("  \
+      "USER_OID           INT    NOT NULL," \
+      "ANIMAL_OID         INT    NOT NULL," \
+      "FOREIGN KEY (USER_OID) REFERENCES users(oid)" \ 
+      "FOREIGN KEY (ANIMAL_OID) REFERENCES animals(oid)" \
+       ") WITHOUT ROWID; \
+       ";
+
+    rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
+   
+    if( rc != SQLITE_OK ){
+        return false;
+    }
+
+    return true;
+}
+
 std::vector< std::map<std::string, std::string> > SQLite3DB::index(std::string table_name){
     TableReturn &table_return = return_table();
 
@@ -83,7 +118,7 @@ std::map<std::string, std::string> SQLite3DB::get(std::string table_name, int id
     TableReturn &table_return = return_table();
 
     table_return.get_return_values.clear();
-    std::string sql = "SELECT * FROM " + table_name + " WHERE id = " + std::to_string(id);
+    std::string sql = "SELECT * FROM " + table_name + " WHERE oid = " + std::to_string(id);
 
     rc = sqlite3_exec(db, sql.c_str(), get_callback, (void*)data, &zErrMsg);
     if( rc != SQLITE_OK ){
@@ -124,7 +159,7 @@ bool SQLite3DB::update(std::string table_name, std::map<std::string, std::string
     update_data.pop_back();
 
     std::string sql = "UPDATE " + table_name + " SET " +
-    update_data + "WHERE id = " + std::to_string(id);
+    update_data + "WHERE oid = " + std::to_string(id);
     ;
 
     rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
@@ -136,13 +171,52 @@ bool SQLite3DB::update(std::string table_name, std::map<std::string, std::string
 }
 
 bool SQLite3DB::destroy(std::string table_name, int id){
-    std::string sql = "DELETE FROM " + table_name + " WHERE id = " + std::to_string(id); 
+    std::string sql = "DELETE FROM " + table_name + " WHERE oid = " + std::to_string(id); 
     rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
     if( rc != SQLITE_OK ){
         return false;
     } 
 
     return true;
+}
+
+std::vector< std::map<std::string, std::string> > SQLite3DB::get_where(std::string table_name, std::map<std::string, std::string> conditions, std::vector<std::map<std::string, std::string> > join_conditions){
+    TableReturn &table_return = return_table();
+    table_return.index_return_values.clear();
+
+    std::string update_data = "";
+    std::string conditions_data = "";
+
+    for (std::pair<std::string,std::string> pair : conditions){
+            update_data.append(pair.first + " = '" + pair.second + "' AND ");
+    }
+
+    update_data.erase(update_data.size() - 5, 5);
+
+    for(std::map<std::string, std::string> map : join_conditions){
+        conditions_data.append(
+            "JOIN " + map["join_table_name"] + " ON " +
+            map["join_table_name"] + "." + map["join_table_attribute"] +
+            " = " + 
+            map["source_table_name"] + "." + map["source_table_attribute"] + " "
+        );
+    }
+
+    std::string sql = "SELECT * FROM " + table_name + 
+    conditions_data +
+    "WHERE " + update_data;
+    ;
+
+    rc = sqlite3_exec(db, sql.c_str(), index_callback, (void*)data, &zErrMsg);
+    if( rc != SQLITE_OK ){
+        std::map<std::string, std::string> error_map;
+
+        error_map["ERROR"] = zErrMsg;
+        table_return.index_return_values.push_back(error_map);
+        sqlite3_free(zErrMsg);
+    }
+
+    return table_return.index_return_values;
 }
 
 SQLite3DB::~SQLite3DB(){

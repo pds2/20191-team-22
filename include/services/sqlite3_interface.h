@@ -15,6 +15,8 @@ class SQLite3Interface {
         virtual bool create(std::string table_name, std::map<std::string, std::string> insert_params) = 0;
         virtual bool update(std::string table_name, std::map<std::string, std::string> insert_params, int id) = 0;
         virtual bool destroy(std::string table_name, int id) = 0;
+
+        virtual std::vector<std::map<std::string, std::string> > get_where(std::string table_name, std::map<std::string, std::string> conditons, std::vector<std::map<std::string, std::string> > join_conditions) = 0;
 };
 
 #endif

@@ -7,9 +7,10 @@
 #include "../../include/services/http_server.h"
 #include "../../include/services/controller.h"
 
-
 #define PORT 8080
+
 HttpServer::HttpServer(){
+    
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
         perror("In socket");
