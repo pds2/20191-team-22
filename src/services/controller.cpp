@@ -29,13 +29,13 @@ void Controller::handle_request(const char *buffer, int socket){
     close(socket);
 }
 
-void Controller::get(std::string route, int socket){
+void Controller::get(std::string route, int socket, std::string status){
     std::string response;
     if(route == "/favicon.ico")
         return;
 
-    if(route == "/")
-        route = "/index.html";
+    if(route == "/" || route == "/?") //TOSQUEIRA
+        route = "/home.html";
 
     // Remove slash from header
     route.erase(0,1);
@@ -47,7 +47,7 @@ void Controller::get(std::string route, int socket){
         file.open("views/404.html");
         response = build_response("404 Not Found" , file);
     }else{
-        response = build_response("200 OK", file);
+        response = build_response(status, file);
     }
 
     const char *cstr = response.c_str();
@@ -78,38 +78,64 @@ std::string Controller::build_response(std::string status, std::ifstream &file){
 void Controller::handle_method(std::string method, int socket, std::string route, const char *buffer){
     std::string buff(buffer);
     if(method == "GET"){
-        get(route, socket);
+        get(route, socket, "200 OK");
 
     }else if (method == "POST"){
         post(route, buff, socket);
 
     }else if (method == "PUT"){
-        //put();
+        //patch();
+    }else if (method == "DELETE"){
+        //patch();
     }
 }
 
 void Controller::post(std::string route, std::string buffer, int socket){
-    static std::map<std::string, std::string> body = get_body(buffer);
-    for(std::pair<std::string, std::string> pair : body){
-        std::cout << pair.first << " : " << pair.second << std::endl;
+    static std::map<std::string, std::string> body;
+    body.clear();
+
+    body = get_body(buffer);
+    if(body["delete"] == "true"){
+        destroy(route, buffer, socket);
+        return;
     }
-    get(route, socket);
+    for(std::pair<std::string, std::string> pair : body){
+        std::cout << pair.first << ": " << pair.second << std::endl;
+    }
+
+    // get(route, socket, "201 Created");
+    std::string response = "HTTP/1.1 200 OK";
+    const char *cstr = response.c_str();
+    write(socket , cstr , response.length());
+}
+
+void Controller::destroy(std::string route, std::string buffer, int socket){
+    std::cout << "Destroyed" << std::endl;
 }
 
 std::map<std::string, std::string> Controller::get_body(std::string buffer){
-    std::regex reg ("(.*?)=(.*?)&");
-    std::smatch matches;
-    std::regex_search(buffer, matches, reg);
-    std::string str = buffer;
     std::map<std::string, std::string> result;
+    result.clear();
 
-    while(std::regex_search(str, matches, reg)){
+    const std::regex propertiesReg ("(.*?)=(.*?)&");
+    const std::regex bodyReg ("\\s{3,}(.*)");
+    const std::regex beautify ("(.*?)\\+");
+    std::smatch matches;
+
+    std::regex_search(buffer, matches, bodyReg);
+    std::string body; 
+    body = matches.str(1);
+    body += "&";
+
+    while(std::regex_search(body, matches, propertiesReg)){
+        std::string value;
+        value = matches.str(2);
         
-        result[matches.str(1)] = matches.str(2);
+        result[matches.str(1)] = value; 
         
         // Eliminate the previous match and create
         // a new string to search
-        str = matches.suffix().str();
+        body = matches.suffix().str();
     }
     return result;
 }

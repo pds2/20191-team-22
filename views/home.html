@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PetHero</title>
+</head>
+<body>
+    <div class="animals-wrapper">
+        <div class="animal-item" animal-0>
+            <div class="like">
+                <button onclick="likeAnimal(0, 'animal-0')">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="heart" class="svg-inline--fa fa-heart fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path class="heart" fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="animal-item" animal-1>
+                <div class="like">
+                    <button onclick="likeAnimal(1, 'animal-1')">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="heart" class="svg-inline--fa fa-heart fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path class="heart" fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+        </div>
+        <div class="animal-item" animal-2>
+            <div class="like">
+                <button onclick="likeAnimal(2, 'animal-2')">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="heart" class="svg-inline--fa fa-heart fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path class="heart" fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="animal-item" animal-3>
+        <div class="like">
+            <button onclick="likeAnimal(3, 'animal-3')">
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="heart" class="svg-inline--fa fa-heart fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path class="heart" fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z">
+                    </path>
+                </svg>
+            </button>
+        </div>
+        </div>
+        <div class="animal-item" animal-4>
+            <div class="like">
+                <button onclick="likeAnimal(4, 'animal-4')">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="heart" class="svg-inline--fa fa-heart fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path class="heart" fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    a{
+        text-decoration: none;
+        color: white;
+    }
+    body {
+        background-color: lightseagreen;
+    }
+
+    .animals-wrapper{
+        max-width: 80%;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        position: relative;
+        margin: 0 auto;
+        transition: 1s;
+    }
+
+    .animal-item{
+        transition: .5s;
+        width: 100%;
+        height: 30em;
+        margin: 1em 0;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 20px 20px #00000054;
+    }
+    .animal-item:hover .like{
+        opacity: 1;
+    }
+
+    .like{
+        opacity: 0;
+        position: absolute;
+        width: 100%;
+        height: 30em;
+        border-radius: 10px;
+        background-color: rgba(0, 0, 0, 0.226);
+        transition: .5s;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .like button{
+        border: none;
+        background-color: transparent;
+        outline: 0;
+    }
+    .like svg{
+        width: 6em;
+    }
+    .heart{
+        fill: white;
+    }
+
+    .liked{
+        animation: liked .5s forwards ease-in;
+    }
+
+    @keyframes liked {
+        100%{
+            transform: translateX(80em);
+            height: 0;
+        }
+    }
+
+
+</style>
+<script>
+    function likeAnimal(id, tag){
+        var element = document.querySelector(`[${tag}]`);
+        element.classList.add("liked");
+        setTimeout(() =>{
+            element.parentNode.removeChild(element);
+        }, 500);
+
+        let xml = new XMLHttpRequest();
+        xml.open("POST", "/home.html");
+        xml.send(`id=${id}&nome=Joao Pedro Bahia`);
+    }
+</script>
+</html>
