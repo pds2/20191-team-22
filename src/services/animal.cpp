@@ -15,6 +15,8 @@
 #define INTERESTS_TABLE_NAME "interests"
 #define INTERESTS_TABLE_JOIN_ATTRIBUTE "animal_oid"
 
+#define USERS_TABLE_NAME "users"
+
 Animal::Animal(int id, std::string name, std::string type, std::string color, int age, float height, float weight){
     _id = id;
     _name = name;
@@ -91,7 +93,7 @@ std::vector<User> Animal::show_interested(){
 
     join_conditions.push_back(interests_join_conditions);
 
-    std::vector< std::map<std::string, std::string> > adopters_vector = _db.get_where("users", conditions, join_conditions);
+    std::vector< std::map<std::string, std::string> > adopters_vector = _db.get_where(USERS_TABLE_NAME, conditions, join_conditions);
 
     for (std::map<std::string, std::string> adopter_data : adopters_vector){
         User adopter = User::get(std::stoi(adopter_data["iod"]));
