@@ -20,6 +20,34 @@ User::User(int id, std::string name, std::string cpf, std::string email, std::st
     _gender = gender;
 }
 
+int User::get_id(){
+    return this->_id;
+}
+
+std::string User::get_name(){
+    return this->_name;
+}
+
+std::string User::get_cpf(){
+    return this->_cpf;
+}
+
+std::string User::get_email(){
+    return this->_email;
+}
+
+std::string User::get_phone_number(){
+    return this->_phone_number;
+}
+
+std::string User::get_address(){
+    return this->_address;
+}
+
+char User::get_gender(){
+    return this->_gender;
+}
+
 std::vector<User> User::index(){
     std::vector<std::map<std::string, std::string> > users_data = _db.index(USERS_TABLE_NAME);
 
@@ -27,7 +55,7 @@ std::vector<User> User::index(){
 
     for (std::map<std::string, std::string> user_data : users_data){
         User user(
-            std::stoi(user_data["iod"]),
+            std::stoi(user_data["row_id"]),
             user_data["NAME"],
             user_data["CPF"],
             user_data["EMAIL"],
@@ -44,9 +72,8 @@ std::vector<User> User::index(){
 
 User User::get(int id){
     std::map<std::string, std::string> user_data = _db.get(USERS_TABLE_NAME, id);
-
     User user(
-            std::stoi(user_data["iod"]),
+            id,
             user_data["NAME"],
             user_data["CPF"],
             user_data["EMAIL"],

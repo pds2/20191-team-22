@@ -19,7 +19,7 @@ class SQLite3DB : public SQLite3Interface {
     public:
         SQLite3DB();
 
-        bool create_tables();
+        void create_tables();
 
         static TableReturn &return_table();
 

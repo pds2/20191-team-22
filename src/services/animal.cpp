@@ -10,10 +10,10 @@
 #include <map>
 
 #define ANIMALS_TABLE_NAME "animals"
-#define ANIMALS_TABLE_JOIN_ATTRIBUTE "oid"
+#define ANIMALS_TABLE_JOIN_ATTRIBUTE "rowid"
 
 #define INTERESTS_TABLE_NAME "interests"
-#define INTERESTS_TABLE_JOIN_ATTRIBUTE "animal_oid"
+#define INTERESTS_TABLE_JOIN_ATTRIBUTE "animal_rowid"
 
 #define USERS_TABLE_NAME "users"
 
@@ -34,7 +34,7 @@ std::vector<Animal> Animal::index(){
 
     for (std::map<std::string, std::string> animal_data : animals_data){
         Animal animal(
-            std::stoi(animal_data["iod"]),
+            std::stoi(animal_data["row_id"]),
             animal_data["NAME"],
             animal_data["TYPE"],
             animal_data["COLOR"],
@@ -53,7 +53,7 @@ Animal Animal::get(int id){
     std::map<std::string, std::string> animal_data = _db.get(ANIMALS_TABLE_NAME, id);
 
     Animal animal(
-        std::stoi(animal_data["iod"]),
+        std::stoi(animal_data["row_id"]),
         animal_data["NAME"],
         animal_data["TYPE"],
         animal_data["COLOR"],
@@ -84,7 +84,7 @@ std::vector<User> Animal::show_interested(){
 
     std::map<std::string, std::string> interests_join_conditions;
 
-    conditions["interests.animal_oid"] = this->_id;
+    conditions["interests.animal_rowid"] = this->_id;
     
     interests_join_conditions["join_table_name"] = INTERESTS_TABLE_NAME;
     interests_join_conditions["join_table_attribute"] = INTERESTS_TABLE_JOIN_ATTRIBUTE;

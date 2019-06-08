@@ -16,7 +16,7 @@ public:
     Adopter(int id, string name, string cpf, string email, string phone_number, string address, char gender)
             : User(id, name, cpf, email, phone_number, address, gender){}
             
-    bool register_interest(int user_id, int animal_id);
+    bool register_interest(int animal_id);
     std::vector<Animal> show_interests();
 };
 
