@@ -143,16 +143,7 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
     }
     else if (class_name == std::string("interest")){
         User user = User::get(std::stoi(body["user_rowid"]));
-        Adopter adopter = Adopter(
-            user.get_id(),
-            user.get_name(),
-            user.get_cpf(),
-            user.get_email(),
-            user.get_phone_number(),
-            user.get_address(),
-            user.get_gender(),
-            user.get_password()
-            );
+        Adopter adopter = Adopter(user);
 
         result = adopter.register_interest(std::stoi(body["animal_rowid"]));
     }
