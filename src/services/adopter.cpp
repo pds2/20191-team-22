@@ -12,15 +12,15 @@
 #define ANIMALS_TABLE_NAME "animals"
 
 #define USERS_TABLE_NAME "users"
-#define USERS_TABLE_JOIN_ATTRIBUTE "oid"
+#define USERS_TABLE_JOIN_ATTRIBUTE "rowid"
 
 #define INTERESTS_TABLE_NAME "interests"
-#define INTERESTS_TABLE_JOIN_ATTRIBUTE "user_oid"
+#define INTERESTS_TABLE_JOIN_ATTRIBUTE "user_rowid"
 
-bool Adopter::register_interest(int user_id, int animal_id){
+bool Adopter::register_interest(int animal_id){
     std::map<std::string, std::string> insert_params;
-    insert_params["user_id"] = std::to_string(user_id);
-    insert_params["animal_id"] = std::to_string(animal_id);
+    insert_params["user_rowid"] = std::to_string(_id);
+    insert_params["animal_rowid"] = std::to_string(animal_id);
 
     return _db.create(INTERESTS_TABLE_NAME, insert_params);
 }
@@ -32,7 +32,7 @@ std::vector<Animal> Adopter::show_interests(){
 
     std::map<std::string, std::string> interests_join_conditions;
 
-    conditions["interests.users_oid"] = this->_id;
+    conditions["interests.users_rowid"] = this->_id;
     
     interests_join_conditions["join_table_name"] = INTERESTS_TABLE_NAME;
     interests_join_conditions["join_table_attribute"] = INTERESTS_TABLE_JOIN_ATTRIBUTE;

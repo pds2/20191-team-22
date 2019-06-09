@@ -31,6 +31,7 @@ public:
     static bool destroy(int id);
 
     std::vector<User> show_interested();
+    std::map<std::string, std::string> to_map();
 };
 
 #endif

@@ -8,16 +8,16 @@
     <body>
         <h1>
             <form method="post" action="index.html" > <!-- enctype='multipart/form-data' -->
-                <label for="name">Nome</label>
+                <input type="hidden" name="rowid" value="1">
+                <label for="NAME">Nome</label>
                 <input type="text" name="name">
                 <br>
-                <label for="type">Tipo</label>
+                <label for="TYPE">Tipo</label>
                 <input type="text" name="type">
                 <br><br>
-                <input type="file" name="fileToUpload" id="fileToUpload">
-                <br><br>
                 <input type="submit" value="Submit">
-                <input name="delete" type="hidden" value="true">
+                <input name="put" type="hidden" value="true">
+                <input name="class_name" type="hidden" value="animal">
             </form> 
         </h1>
     </body>

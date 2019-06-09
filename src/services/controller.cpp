@@ -1,6 +1,9 @@
 #include "../../include/services/controller.h"
 #include "../../include/services/sqlite3_db.h"
 #include "../../include/services/dsl.h"
+#include "../../include/services/animal.h"
+#include "../../include/services/user.h"
+#include "../../include/services/adopter.h"
 #include <stdio.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -104,22 +107,116 @@ void Controller::post(std::string route, std::string buffer, int socket){
     body.clear();
 
     body = get_body(buffer);
-    if(body["delete"] == "true"){
-        destroy(route, buffer, socket);
-        return;
-    }
+
     for(std::pair<std::string, std::string> pair : body){
         std::cout << pair.first << ": " << pair.second << std::endl;
     }
 
-    // get(route, socket, "201 Created");
-    std::string response = "HTTP/1.1 200 OK";
-    const char *cstr = response.c_str();
-    write(socket , cstr , response.length());
+    if(body["delete"] == "true"){
+        destroy(route, buffer, body, socket);
+        return;
+    }else if (body["put"] == "true"){
+        update(route, buffer, body, socket);
+        return;
+    }
+    else{
+        create(route, buffer, body, socket);
+        return;
+    }
 }
 
-void Controller::destroy(std::string route, std::string buffer, int socket){
-    std::cout << "Destroyed" << std::endl;
+void Controller::create(std::string route, std::string buffer, std::map<std::string, std::string> body, int socket){
+    // get(route, socket, "201 Created");
+    std::string class_name = body["class_name"];
+
+    body.erase("class_name");
+    body.erase("delete");
+    body.erase("put");
+
+    bool result;
+
+    if (class_name == std::string("animal")){
+        result = Animal::create(body);
+    } 
+    else if (class_name == std::string("user")){
+        result = User::create(body);
+    }
+    else if (class_name == std::string("interest")){
+        User user = User::get(std::stoi(body["user_rowid"]));
+        Adopter adopter = Adopter(
+            user.get_id(),
+            user.get_name(),
+            user.get_cpf(),
+            user.get_email(),
+            user.get_phone_number(),
+            user.get_address(),
+            user.get_gender(),
+            user.get_password()
+            );
+
+        result = adopter.register_interest(std::stoi(body["animal_rowid"]));
+    }
+
+    if (result){
+        std::cout << "Interesse do Animal de ID " << body["animal_rowid"] << " com usuário de ID " << body["user_rowid"] << " criado com sucesso!" << std::endl;
+        std::string response = "HTTP/1.1 200 OK";
+        const char *cstr = response.c_str();
+        write(socket , cstr , response.length());
+    } else {
+        std::cout << "Não foi possível excluir o animal de ID " << body["id"] << std::endl;
+        get("/500.html", socket, "500 Internal Server Errors");
+    }
+}
+
+void Controller::destroy(std::string route, std::string buffer, std::map<std::string, std::string> body, int socket){
+    // get(route, socket, "201 Created");
+    std::string class_name = body["class_name"];
+    bool result;
+
+    if (class_name == std::string("animal")){
+        result = Animal::destroy(std::atoi(body["animal_rowid"].c_str()));
+    } 
+    else if (class_name == std::string("user")){
+        result = User::destroy(std::atoi(body["user_rowid"].c_str()));
+    }
+
+    if (result){
+        std::cout << "Animal de ID " << body["animal_rowid"] << " excluído com sucesso!" << std::endl;
+        std::string response = "HTTP/1.1 200 OK";
+        const char *cstr = response.c_str();
+        write(socket , cstr , response.length());
+    } else {
+        std::cout << "Não foi possível excluir o animal de ID " << body["id"] << std::endl;
+        get("/500.html", socket, "500 Internal Server Errors");
+    }
+}
+
+void Controller::update(std::string route, std::string buffer, std::map<std::string, std::string> body, int socket){
+    // get(route, socket, "201 Created");
+    std::string class_name = body["class_name"];
+
+    body.erase("class_name");
+    body.erase("delete");
+    body.erase("put");
+
+    bool result;
+
+    if (class_name == std::string("animal")){
+        result = Animal::update(body, std::atoi(body["rowid"].c_str()));
+    } 
+    else if (class_name == std::string("user")){
+        result = User::update(body, std::atoi(body["rowid"].c_str()));
+    }
+
+    if (result){
+        std::cout << "Animal de ID " << body["animal_rowid"] << " atualizado com sucesso!" << std::endl;
+        std::string response = "HTTP/1.1 200 OK";
+        const char *cstr = response.c_str();
+        write(socket , cstr , response.length());
+    } else {
+        std::cout << "Não foi possível atualizar o animal de ID " << body["animal_rowid"] << std::endl;
+        get("/500.html", socket, "500 Internal Server Errors");
+    }
 }
 
 std::map<std::string, std::string> Controller::get_body(std::string buffer){
