@@ -19,3 +19,9 @@
     
     - Como um indivíduo interessado em utilizar a plataforma eu quero poder
     cadastrar meus dados pessoais para que eu possa utilizar o sistema
+
+
+## DSL
+
+  - {{}} -> Utilizado para representar um atributo
+  - [[]] -> Utilizado para representar a inserção em loop do mesmo partial

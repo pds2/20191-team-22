@@ -113,7 +113,7 @@ std::map<std::string, std::string> Animal::to_map(){
     attribute_map["COLOR"] = this->_color;
     attribute_map["AGE"] = this->_age;
     attribute_map["HEIGHT"] = this->_height;
-    attribute_map["WEIGHT"] =this-> _weight;
+    attribute_map["WEIGHT"] = this-> _weight;
 
     return attribute_map;
 }

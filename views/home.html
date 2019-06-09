@@ -8,16 +8,7 @@
 </head>
 <body>
     <div class="animals-wrapper">
-        <div class="animal-item" animal-1>
-                <div class="like">
-                    <button onclick="likeAnimal(1, 'animal-1')">
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="heart" class="svg-inline--fa fa-heart fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path class="heart" fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z">
-                            </path>
-                        </svg>
-                    </button>
-                </div>
-        </div>
+        [[_animal]]
     </div>
 </body>
 <style>
@@ -91,6 +82,8 @@
 
 </style>
 <script>
+    setCookie('user_id', '1', 1);
+    let user_id = getCookie("user_id");
     function likeAnimal(id, tag){
         var element = document.querySelector(`[${tag}]`);
         element.classList.add("liked");
@@ -99,9 +92,32 @@
         }, 500);
 
         let xml = new XMLHttpRequest();
-        xml.open("POST", "/home.html");
+        xml.open("POST", "/home");
         xml.setRequestHeader("user_id", id);
-        xml.send(`animal_rowid=${id}&user_rowid=1&class_name=interest`);
+        xml.send(`animal_rowid=${id}&user_rowid=${user_id}&class_name=interest`);
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires=" + d.toGMTString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
     }
 </script>
 </html>
