@@ -140,6 +140,7 @@
 
         let xml = new XMLHttpRequest();
         xml.open("POST", "/home.html");
+        xml.setRequestHeader("user_id", id);
         xml.send(`id=${id}&nome=Joao Pedro Bahia`);
     }
 </script>

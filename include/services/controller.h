@@ -9,7 +9,7 @@
 class Controller {
     private:
         void get(std::string filename, int socket, std::string status);
-        std::string build_response(std::string status, std::ifstream &file);
+        std::string build_response(std::string status, std::ifstream &file, std::string route = "", std::string id = "");
         void handle_method(std::string method, int socket, std::string filename, const char *buffer);
         void post(std::string route, std::string buffer, int socket);
         void destroy(std::string route, std::string buffer, int socket);
