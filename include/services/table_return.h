@@ -10,6 +10,7 @@
 
 class TableReturn {
 public:
+    // Methods for handling DB return values
     std::map<std::string, std::string> get_return_values;
     std::vector< std::map<std::string, std::string> > index_return_values;
 };

@@ -124,6 +124,7 @@ std::vector<Animal> User::animals(){
     std::map<std::string, std::string> helper_map;
     helper_map["USER_ROWID"] = this->_id;
 
+    // Return user animals in map form
     std::vector< std::map<std::string, std::string> > helper_vector = _db.get_where(ANIMALS_TABLE_NAME, helper_map);
 
     for(std::map<std::string, std::string> map : helper_vector){
@@ -133,6 +134,8 @@ std::vector<Animal> User::animals(){
     return animals;
 }
 
+
+// Method to simplify user output to views
 std::map<std::string, std::string> User::to_map(){
     std::map<std::string, std::string> attribute_map;
 

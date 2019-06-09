@@ -86,6 +86,7 @@ std::vector<User> Animal::show_interested(){
 
     conditions["interests.animal_rowid"] = this->_id;
     
+    // JOIN interests ON interests.animal_rowid = animals.rowid 
     interests_join_conditions["join_table_name"] = INTERESTS_TABLE_NAME;
     interests_join_conditions["join_table_attribute"] = INTERESTS_TABLE_JOIN_ATTRIBUTE;
     interests_join_conditions["source_table_name"] = ANIMALS_TABLE_NAME;
