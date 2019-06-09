@@ -103,3 +103,17 @@ std::vector<User> Animal::show_interested(){
 
     return interested;
 }
+
+std::map<std::string, std::string> Animal::to_map(){
+    std::map<std::string, std::string> attribute_map;
+
+    attribute_map["ID"] = this->_id;
+    attribute_map["NAME"] = this->_name;
+    attribute_map["TYPE"] = this->_type;
+    attribute_map["COLOR"] = this->_color;
+    attribute_map["AGE"] = this->_age;
+    attribute_map["HEIGHT"] = this->_height;
+    attribute_map["WEIGHT"] =this-> _weight;
+
+    return attribute_map;
+}

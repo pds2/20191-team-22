@@ -13,10 +13,48 @@ TableReturn &SQLite3DB::return_table(){
     return table_return;
 }
 
-void SQLite3DB::create_tables(){
+bool SQLite3DB::create_tables(){
+    std::string sql = "CREATE TABLE USERS("  \
+      "NAME           TEXT    NOT NULL," \
+      "CPF            TEXT    NOT NULL," \
+      "EMAIL          TEXT    NOT NULL," \
+      "PHONE_NUMBER   TEXT    NOT NULL," \
+      "ADDRESS        TEXT    NOT NULL," \ 
+      "GENDER         CHAR(1) NOT NULL," \ 
+      "PASSWORD       TEXT    NOT NULL," \ 
+       "); \
+       CREATE TABLE ANIMALS("  \
+      "NAME           TEXT    NOT NULL," \
+      "TYPE           TEXT    NOT NULL," \
+      "COLOR          TEXT    NOT NULL," \
+      "AGE            INT     NOT NULL," \
+      "HEIGHT         FLOAT   NOT NULL," \ 
+      "WEIGHT         FLOAT   NOT NULL," \ 
+       "); \
+       CREATE TABLE INTERESTS("  \
+      "USER_ROWID           INT    NOT NULL," \
+      "ANIMAL_ROWID         INT    NOT NULL," \
+      "FOREIGN KEY (USER_ROWID) REFERENCES users(rowid)" \ 
+      "FOREIGN KEY (ANIMAL_ROWID) REFERENCES animals(rowid)" \
+       "); \
+       ";
+
+    rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
+   
+    if( rc != SQLITE_OK ){
+        return false;
+    }
+
+    return true;
+}
+
+void SQLite3DB::populate_tables(){
     std::string sql = "INSERT INTO users VALUES("  \
-      "'Douglas', '10191817188', 'oi@oi.com', '83788363927', 'daushdouasdn', 'M'" \
-       ");";
+        "'Douglas', '10191817188', 'oi@oi.com', '83788363927', 'daushdouasdn', 'M', 'TESTE'" \
+        ");" \
+        "INSERT INTO animals VALUES("  \
+        "'Douglinhas', 'Cachorro', 'Preto', '3', '1', '4'" \
+        ");" ;
 
     rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
     if( rc ) {
@@ -33,18 +71,7 @@ SQLite3DB::SQLite3DB(){
     } else {
         std::cout << "Abriu o banco com sucesso!" << std::endl;
     }
-    create_tables();
-    /* Create SQL statement */
-    std::string sql = "SELECT * from animals";
-
-    /* Execute SQL statement */
-    rc = sqlite3_exec(db, sql.c_str(), callback, (void*)data, &zErrMsg);
-    
-    if( rc != SQLITE_OK ) {
-        fprintf(stderr, "SQL error: %s\n", zErrMsg);
-        sqlite3_free(zErrMsg);
-    } else {
-    }
+    populate_tables();
 }
 
 int SQLite3DB::callback(void *NotUsed, int argc, char **argv, char **azColName) {

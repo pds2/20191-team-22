@@ -19,7 +19,9 @@ class SQLite3DB : public SQLite3Interface {
     public:
         SQLite3DB();
 
-        void create_tables();
+
+        bool create_tables();
+        void populate_tables();
 
         static TableReturn &return_table();
 
@@ -33,7 +35,7 @@ class SQLite3DB : public SQLite3Interface {
         virtual bool update(std::string table_name, std::map<std::string, std::string> insert_params, int id);
         virtual bool destroy(std::string table_name, int id);
 
-        virtual std::vector< std::map<std::string, std::string> > get_where(std::string table_name, std::map<std::string, std::string> conditions, std::vector<std::map<std::string, std::string> > join_conditions);
+        virtual std::vector< std::map<std::string, std::string> > get_where(std::string table_name, std::map<std::string, std::string> conditions, std::vector<std::map<std::string, std::string> > join_conditions = std::vector<std::map<std::string, std::string> >());
 
         ~SQLite3DB(); 
 };

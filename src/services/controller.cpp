@@ -105,7 +105,6 @@ void Controller::post(std::string route, std::string buffer, int socket){
         destroy(route, buffer, body, socket);
         return;
     }else if (body["put"] == "true"){
-        std::cout << "Entrei no PUT" << std::endl;
         update(route, buffer, body, socket);
         return;
     }
@@ -118,13 +117,18 @@ void Controller::post(std::string route, std::string buffer, int socket){
 void Controller::create(std::string route, std::string buffer, std::map<std::string, std::string> body, int socket){
     // get(route, socket, "201 Created");
     std::string class_name = body["class_name"];
+
+    body.erase("class_name");
+    body.erase("delete");
+    body.erase("put");
+
     bool result;
 
     if (class_name == std::string("animal")){
-        result = Animal::destroy(std::stoi(body["animal_rowid"]));
+        result = Animal::create(body);
     } 
     else if (class_name == std::string("user")){
-        result = User::destroy(std::stoi(body["user_rowid"]));
+        result = User::create(body);
     }
     else if (class_name == std::string("interest")){
         User user = User::get(std::stoi(body["user_rowid"]));
@@ -135,7 +139,8 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
             user.get_email(),
             user.get_phone_number(),
             user.get_address(),
-            user.get_gender()
+            user.get_gender(),
+            user.get_password()
             );
 
         result = adopter.register_interest(std::stoi(body["animal_rowid"]));
@@ -183,15 +188,9 @@ void Controller::update(std::string route, std::string buffer, std::map<std::str
     body.erase("delete");
     body.erase("put");
 
-    std::cout << "DELETEI TUDO DO PUT" << std::endl;
-    for (std::pair<std::string,std::string> pair : body){
-        std::cout << pair.first << " ||| " << pair.second << std::endl;
-    }
     bool result;
 
     if (class_name == std::string("animal")){
-        std::cout << "Entrei no IF" << std::endl;
-        std::cout << body["rowid"] << std::endl;
         result = Animal::update(body, std::atoi(body["rowid"].c_str()));
     } 
     else if (class_name == std::string("user")){
