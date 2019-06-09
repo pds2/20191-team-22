@@ -100,6 +100,7 @@
 
         let xml = new XMLHttpRequest();
         xml.open("POST", "/home.html");
+        xml.setRequestHeader("user_id", id);
         xml.send(`animal_rowid=${id}&user_rowid=1&class_name=interest`);
     }
 </script>

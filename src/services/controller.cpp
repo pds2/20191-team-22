@@ -1,5 +1,6 @@
 #include "../../include/services/controller.h"
 #include "../../include/services/sqlite3_db.h"
+#include "../../include/services/dsl.h"
 #include "../../include/services/animal.h"
 #include "../../include/services/user.h"
 #include "../../include/services/adopter.h"
@@ -33,43 +34,53 @@ void Controller::handle_request(const char *buffer, int socket){
 }
 
 void Controller::get(std::string route, int socket, std::string status){
+    std::regex parseRoute ("[\\/](\\w+)[\\/]?(\\d+)?");
+    std::smatch matches;
     std::string response;
-    if(route == "/favicon.ico")
+    std::string id;
+
+    std::cout << route << std::endl;
+    // Route parsing
+    std::regex_search(route, matches, parseRoute);
+    route = matches.str(1);
+    id = matches.str(2);
+
+    std::cout << route + " -- " << id << std::endl;
+    // Routes defaults
+    if(route == "favicon")
         return;
 
-    if(route == "/" || route == "/?") //TOSQUEIRA
-        route = "/home.html";
-
-    // Remove slash from header
-    route.erase(0,1);
+    if(route == "/" || route == "/?" || route == "") //TOSQUEIRA
+        route = "home";
 
     std::ifstream file;
-    file.open("views/" + route);
+    file.open("views/" + route + ".html");
+    
     if (!file) {
         std::cout << "Unable to open file" << std::endl;
         file.open("views/404.html");
         response = build_response("404 Not Found" , file);
     }else{
-        response = build_response(status, file);
+        response = build_response(status, file, route, id);
     }
 
     const char *cstr = response.c_str();
     write(socket , cstr , response.length());
 }
 
-std::string Controller::build_response(std::string status, std::ifstream &file){
+std::string Controller::build_response(std::string status, std::ifstream &file, std::string route, std::string id){
     std::string res = "HTTP/1.1"+ status +"\nContent-Type: text/html\nContent-Length: ";
-
     std::string helper_string = "";
 
     char ch;
-    int file_size = 0;
     while(file.get(ch)) {
-        file_size++;
         helper_string += ch;
     }
 
-    res.append(std::to_string(file_size));
+    std::cout << "file parsed" << std::endl;
+    helper_string = DSL::route(helper_string, route, id);
+
+    res.append(std::to_string(helper_string.length()));
     res.append("\n\n");
     res.append(helper_string);
     

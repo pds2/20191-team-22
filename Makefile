@@ -8,12 +8,14 @@ build:
 	include/services/sqlite3_interface.h \
 	include/services/table_return.h \
 	include/services/user.h \
+	include/services/dsl.h \
 	src/services/adopter.cpp \
 	src/services/animal.cpp \
 	src/services/controller.cpp \
 	src/services/http_server.cpp \
 	src/services/sqlite3_db.cpp \
 	src/services/user.cpp \
+	src/services/dsl.cpp \
 	main.cpp \
 	-w \
 	-lsqlite3
@@ -28,12 +30,14 @@ debug-build:
 	include/services/sqlite3_interface.h \
 	include/services/table_return.h \
 	include/services/user.h \
+	include/services/dsl.h \
 	src/services/adopter.cpp \
 	src/services/animal.cpp \
 	src/services/controller.cpp \
 	src/services/http_server.cpp \
 	src/services/sqlite3_db.cpp \
 	src/services/user.cpp \
+	src/services/dsl.cpp \
 	main.cpp \
 	-lsqlite3 \
 	-g
