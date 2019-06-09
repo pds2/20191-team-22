@@ -7,8 +7,11 @@
 #include <vector>
 #include <map>
 #include "./sqlite3_db.h"
+#include "./animal.h"
 
 using namespace std;
+
+class Animal;
 
 class User {
 protected:
@@ -41,6 +44,7 @@ public:
 
     static bool login(std::string email, std::string password);
     
+    std::vector<Animal> animals();
     std::map<std::string, std::string> to_map();
 };
 

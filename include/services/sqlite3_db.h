@@ -19,16 +19,18 @@ class SQLite3DB : public SQLite3Interface {
     public:
         SQLite3DB();
 
-
+        // DB initialization methods
         bool create_tables();
         void populate_tables();
 
         static TableReturn &return_table();
 
+        // Callback methods for SQLite3 
         static int callback(void *NotUsed, int argc, char **argv, char **azColName);
         static int get_callback(void *NotUsed, int argc, char **argv, char **azColName);
         static int index_callback(void *NotUsed, int argc, char **argv, char **azColName);
 
+        // Main methods for SQL data manipulation
         virtual std::vector<std::map<std::string, std::string> > index(std::string table_name);
         virtual std::map<std::string, std::string> get(std::string table_name, int id);
         virtual bool create(std::string table_name, std::map<std::string, std::string> insert_params);

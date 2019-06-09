@@ -21,7 +21,7 @@ bool SQLite3DB::create_tables(){
       "PHONE_NUMBER   TEXT    NOT NULL," \
       "ADDRESS        TEXT    NOT NULL," \ 
       "GENDER         CHAR(1) NOT NULL," \ 
-      "PASSWORD       TEXT    NOT NULL," \ 
+      "PASSWORD       TEXT    NOT NULL" \ 
        "); \
        CREATE TABLE ANIMALS("  \
       "NAME           TEXT    NOT NULL," \
@@ -30,6 +30,8 @@ bool SQLite3DB::create_tables(){
       "AGE            INT     NOT NULL," \
       "HEIGHT         FLOAT   NOT NULL," \ 
       "WEIGHT         FLOAT   NOT NULL," \ 
+      "USER_ROWID     INT   NOT NULL," \
+      "FOREIGN KEY (USER_ROWID) REFERENCES users(rowid)" \  
        "); \
        CREATE TABLE INTERESTS("  \
       "USER_ROWID           INT    NOT NULL," \
@@ -74,6 +76,7 @@ SQLite3DB::SQLite3DB(){
     populate_tables();
 }
 
+// Method necessary for sqlite3.h returns
 int SQLite3DB::callback(void *NotUsed, int argc, char **argv, char **azColName) {
     int i;
     for(i = 0; i<argc; i++) {
@@ -83,6 +86,7 @@ int SQLite3DB::callback(void *NotUsed, int argc, char **argv, char **azColName) 
     return 0;
 }
 
+// Method necessary for sqlite3.h returns
 int SQLite3DB::get_callback(void *NotUsed, int argc, char **argv, char **azColName) {
     int i;
     for(i = 0; i<argc; i++) {
@@ -96,6 +100,7 @@ int SQLite3DB::get_callback(void *NotUsed, int argc, char **argv, char **azColNa
     return 0;
 }
 
+// Method necessary for sqlite3.h returns
 int SQLite3DB::index_callback(void *NotUsed, int argc, char **argv, char **azColName) {
     int i;
     std::map<std::string, std::string> helper_map;
@@ -116,6 +121,7 @@ int SQLite3DB::index_callback(void *NotUsed, int argc, char **argv, char **azCol
 std::vector< std::map<std::string, std::string> > SQLite3DB::index(std::string table_name){
     TableReturn &table_return = return_table();
 
+    // Clear previous query
     table_return.index_return_values.clear();
     std::string sql = "SELECT * FROM " + table_name;
     
@@ -134,6 +140,7 @@ std::vector< std::map<std::string, std::string> > SQLite3DB::index(std::string t
 std::map<std::string, std::string> SQLite3DB::get(std::string table_name, int id){
     TableReturn &table_return = return_table();
 
+    // Clear previous query
     table_return.get_return_values.clear();
     std::string sql = "SELECT * FROM " + table_name + " WHERE rowid = " + std::to_string(id);
 
@@ -148,6 +155,8 @@ std::map<std::string, std::string> SQLite3DB::get(std::string table_name, int id
 
 bool SQLite3DB::create(std::string table_name, std::map<std::string, std::string> insert_params){
     std::string column_data = "", values_data = "";
+
+    // Format for insert
     for (std::pair<std::string,std::string> pair : insert_params){
         column_data.append(pair.first + ",");
         values_data.append("'" + pair.second + "',");
@@ -169,6 +178,8 @@ bool SQLite3DB::create(std::string table_name, std::map<std::string, std::string
 
 bool SQLite3DB::update(std::string table_name, std::map<std::string, std::string> insert_params, int id){
     std::string update_data = "";
+
+    // Format for update
     for (std::pair<std::string,std::string> pair : insert_params){
         update_data.append(pair.first + " = '" + pair.second + "',");
     }
@@ -199,17 +210,21 @@ bool SQLite3DB::destroy(std::string table_name, int id){
 
 std::vector< std::map<std::string, std::string> > SQLite3DB::get_where(std::string table_name, std::map<std::string, std::string> conditions, std::vector<std::map<std::string, std::string> > join_conditions){
     TableReturn &table_return = return_table();
+
+    // Clear previous query
     table_return.index_return_values.clear();
 
     std::string update_data = "";
     std::string conditions_data = "";
 
+    // Format conditions data
     for (std::pair<std::string,std::string> pair : conditions){
             update_data.append(pair.first + " = '" + pair.second + "' AND ");
     }
 
     update_data.erase(update_data.size() - 5, 5);
 
+    // Format join data
     for(std::map<std::string, std::string> map : join_conditions){
         conditions_data.append(
             "JOIN " + map["join_table_name"] + " ON " +

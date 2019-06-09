@@ -34,6 +34,7 @@ std::vector<Animal> Adopter::show_interests(){
 
     conditions["interests.users_rowid"] = this->_id;
     
+    // JOIN interests ON interests.user_rowid = users.rowid 
     interests_join_conditions["join_table_name"] = INTERESTS_TABLE_NAME;
     interests_join_conditions["join_table_attribute"] = INTERESTS_TABLE_JOIN_ATTRIBUTE;
     interests_join_conditions["source_table_name"] = USERS_TABLE_NAME;
@@ -41,6 +42,7 @@ std::vector<Animal> Adopter::show_interests(){
 
     join_conditions.push_back(interests_join_conditions);
 
+    // Vector full of animal data
     std::vector< std::map<std::string, std::string> > animals_vector = _db.get_where(ANIMALS_TABLE_NAME, conditions, join_conditions);
 
     for (std::map<std::string, std::string> animal_data : animals_vector){

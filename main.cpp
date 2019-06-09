@@ -6,6 +6,7 @@
 #include "include/services/animal.h"
 #include "include/services/user.h"
 
+// Singleton DB
 SQLite3DB db = SQLite3DB();
 
 SQLite3DB Animal::_db = db; 

@@ -1,5 +1,6 @@
 #include "../../include/services/sqlite3_db.h"
 #include "../../include/services/user.h"
+#include "../../include/services/animal.h"
 
 #include <iostream>
 #include <sqlite3.h>
@@ -9,6 +10,7 @@
 #include <map>
 
 #define USERS_TABLE_NAME "users"
+#define ANIMALS_TABLE_NAME "animals"
 
 User::User(int id, std::string name, std::string cpf, std::string email, std::string phone_number, std::string address, char gender, std::string password){
     _id = id;
@@ -117,6 +119,23 @@ bool User::login(std::string email, std::string password){
     return true;
 }
 
+std::vector<Animal> User::animals(){
+    std::vector<Animal> animals;
+    std::map<std::string, std::string> helper_map;
+    helper_map["USER_ROWID"] = this->_id;
+
+    // Return user animals in map form
+    std::vector< std::map<std::string, std::string> > helper_vector = _db.get_where(ANIMALS_TABLE_NAME, helper_map);
+
+    for(std::map<std::string, std::string> map : helper_vector){
+        animals.push_back(Animal::get(std::stoi(map["id"])));
+    }
+
+    return animals;
+}
+
+
+// Method to simplify user output to views
 std::map<std::string, std::string> User::to_map(){
     std::map<std::string, std::string> attribute_map;
 

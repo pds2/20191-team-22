@@ -50,13 +50,14 @@ void Controller::get(std::string route, int socket, std::string status){
     if(route == "favicon")
         return;
 
-    if(route == "/" || route == "/?" || route == "") //TOSQUEIRA
+    if(route == "/" || route == "/?" || route == "") // TOSQUEIRA
         route = "home";
 
     std::ifstream file;
     file.open("views/" + route + ".html");
     
     if (!file) {
+        // Error handling
         std::cout << "Unable to open file" << std::endl;
         file.open("views/404.html");
         response = build_response("404 Not Found" , file);
@@ -69,6 +70,7 @@ void Controller::get(std::string route, int socket, std::string status){
 }
 
 std::string Controller::build_response(std::string status, std::ifstream &file, std::string route, std::string id){
+    // Common HTML Header content
     std::string res = "HTTP/1.1"+ status +"\nContent-Type: text/html\nContent-Length: ";
     std::string helper_string = "";
 
@@ -108,10 +110,6 @@ void Controller::post(std::string route, std::string buffer, int socket){
 
     body = get_body(buffer);
 
-    for(std::pair<std::string, std::string> pair : body){
-        std::cout << pair.first << ": " << pair.second << std::endl;
-    }
-
     if(body["delete"] == "true"){
         destroy(route, buffer, body, socket);
         return;
@@ -129,12 +127,14 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
     // get(route, socket, "201 Created");
     std::string class_name = body["class_name"];
 
+    // Erase keys for correct DB insertion
     body.erase("class_name");
     body.erase("delete");
     body.erase("put");
 
     bool result;
 
+    // Check which class to be created
     if (class_name == std::string("animal")){
         result = Animal::create(body);
     } 
@@ -142,17 +142,7 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
         result = User::create(body);
     }
     else if (class_name == std::string("interest")){
-        User user = User::get(std::stoi(body["user_rowid"]));
-        Adopter adopter = Adopter(
-            user.get_id(),
-            user.get_name(),
-            user.get_cpf(),
-            user.get_email(),
-            user.get_phone_number(),
-            user.get_address(),
-            user.get_gender(),
-            user.get_password()
-            );
+        Adopter adopter = Adopter::get(std::stoi(body["user_rowid"]));
 
         result = adopter.register_interest(std::stoi(body["animal_rowid"]));
     }
@@ -173,6 +163,7 @@ void Controller::destroy(std::string route, std::string buffer, std::map<std::st
     std::string class_name = body["class_name"];
     bool result;
 
+    // Check which class to be destroyed
     if (class_name == std::string("animal")){
         result = Animal::destroy(std::atoi(body["animal_rowid"].c_str()));
     } 
@@ -195,12 +186,14 @@ void Controller::update(std::string route, std::string buffer, std::map<std::str
     // get(route, socket, "201 Created");
     std::string class_name = body["class_name"];
 
+    // Erase keys for correct DB insertion
     body.erase("class_name");
     body.erase("delete");
     body.erase("put");
 
     bool result;
 
+    // Check which class to be updated
     if (class_name == std::string("animal")){
         result = Animal::update(body, std::atoi(body["rowid"].c_str()));
     } 
@@ -223,6 +216,7 @@ std::map<std::string, std::string> Controller::get_body(std::string buffer){
     std::map<std::string, std::string> result;
     result.clear();
 
+    // Regex patterns
     const std::regex propertiesReg ("(.*?)=(.*?)&");
     const std::regex bodyReg ("\\s{3,}(.*)");
     const std::regex beautify ("(.*?)\\+");
