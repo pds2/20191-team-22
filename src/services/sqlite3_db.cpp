@@ -21,7 +21,7 @@ bool SQLite3DB::create_tables(){
       "PHONE_NUMBER   TEXT    NOT NULL," \
       "ADDRESS        TEXT    NOT NULL," \ 
       "GENDER         CHAR(1) NOT NULL," \ 
-      "PASSWORD       TEXT    NOT NULL," \ 
+      "PASSWORD       TEXT    NOT NULL" \ 
        "); \
        CREATE TABLE ANIMALS("  \
       "NAME           TEXT    NOT NULL," \
@@ -30,6 +30,8 @@ bool SQLite3DB::create_tables(){
       "AGE            INT     NOT NULL," \
       "HEIGHT         FLOAT   NOT NULL," \ 
       "WEIGHT         FLOAT   NOT NULL," \ 
+      "USER_ROWID     INT   NOT NULL," \
+      "FOREIGN KEY (USER_ROWID) REFERENCES users(rowid)" \  
        "); \
        CREATE TABLE INTERESTS("  \
       "USER_ROWID           INT    NOT NULL," \
