@@ -1,6 +1,32 @@
 # PetHero
 
-## User Stories
+O PetHero é um sistema que liga pessoas que não conseguem tomar mais conta de seus animais de estimação com pessoas que estão interessadas em adotar um pet. 
+
+## Integrantes
+
+- Henrique Faria de Paiva Fagundes
+- João Pedro Bahia Zica
+
+## Como compilar e executar o código
+
+Para compilar o projeto, basta rodar o comando `make build` que o g++ será invocado com todos os arquivos e flags necessários.
+
+Para executar o programa, basta rodar `make run`! Após isso, você pode acessar o site através do seu [localhost](localhost:8080) na porta 8080.
+
+## Como usar
+
+Ao acessar o link, é necessário que o visitante se cadastre na plataforma ou faça seu login.
+Após esses passos, as opções de animais são exibidas e ele pode indicar seu interesse por eles ou não.
+
+Ao indicar o interesse, o usuário dono do animal poderá visualizar as informações do interessado e contatá-lo da maneira que preferir para realizarem algum tipo de acordo.
+
+O usuário também pode cadastrar animais que possui para que sejam exibidos aos outros usuários da plataforma.
+
+### Dados técnicos
+
+O sistema utiliza um banco de dados SQlite 3 e roda sobre um servidor baseado em C++.
+
+### User Stories
 
     - Como um usuário do sistema eu quero poder visualizar os animais que
     estão disponíveis para adoção para que eu possa tomar uma decisão.
