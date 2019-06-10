@@ -7,6 +7,8 @@
 #include <map>
 #include <vector>
 #include <regex>
+#include <sstream>
+#include <fstream>
 
 std::string DSL::route(std::string string, std::string route, std::string id){
 
@@ -21,12 +23,11 @@ std::string DSL::route(std::string string, std::string route, std::string id){
 
             animals = user.animals();
 
-
-
-            for(auto animal : animals)
+            for(Animal animal : animals)
                 objectsToMap.push_back(animal.to_map());
             
             objArr["_animals"] = objectsToMap;
+            string = parsePartials(string, objArr);
         }
         if(route == "profile") {
             User user = User::get(std::stoi(id));
@@ -82,17 +83,38 @@ std::string DSL::parsePartials(std::string string, std::map<std::string, std::ve
     std::regex reg("[\\[]{2}(\\w+)[\\]]{2}"); // Regex que detecta o formato {{tag}}
     std::smatch matches;
     std::string res;
+    std::string helper_string;
 
     while(std::regex_search(string, matches, reg)){
-            res += matches.prefix().str();
-            res += object[matches.str(1)];
+        std::ifstream partial;
 
-            // Eliminate the previous match and create
-            // a new string to search
-            string = matches.suffix().str();
+        res += matches.prefix().str();
+        for(std::map<std::string, std::string> object : objArr[matches.str(1)]){
+            std::cout << matches.str(1) << std::endl;
+            partial.open("views/" + matches.str(1) + ".html");
+            if (!partial) {
+                // Error handling
+                std::cout << "Unable to open file" << std::endl;
+                
+            }else{
+                helper_string = "";
+                char ch;
+                while(partial.get(ch))
+                    helper_string += ch;
+                
+                res += parseTags(helper_string, object);
+                
+            }
+            partial.close();
+        }
+
+        // Eliminate the previous match and create
+        // a new string to search
+        string = matches.suffix().str();
+
     }
     res += string;
-
+    // std::cout << res << std::endl;
     return res;
 }
 

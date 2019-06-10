@@ -15,6 +15,7 @@ TableReturn &SQLite3DB::return_table(){
 
 bool SQLite3DB::create_tables(){
     std::string sql = "CREATE TABLE USERS("  \
+      "ID             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," \
       "NAME           TEXT    NOT NULL," \
       "CPF            TEXT    NOT NULL," \
       "EMAIL          TEXT    NOT NULL," \
@@ -24,6 +25,7 @@ bool SQLite3DB::create_tables(){
       "PASSWORD       TEXT    NOT NULL" \ 
        "); \
        CREATE TABLE ANIMALS("  \
+      "ID             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," \
       "NAME           TEXT    NOT NULL," \
       "TYPE           TEXT    NOT NULL," \
       "COLOR          TEXT    NOT NULL," \
@@ -31,19 +33,20 @@ bool SQLite3DB::create_tables(){
       "HEIGHT         FLOAT   NOT NULL," \ 
       "WEIGHT         FLOAT   NOT NULL," \ 
       "USER_ROWID     INT   NOT NULL," \
-      "FOREIGN KEY (USER_ROWID) REFERENCES users(rowid)" \  
+      "FOREIGN KEY (USER_ROWID) REFERENCES users(id)" \  
        "); \
        CREATE TABLE INTERESTS("  \
       "USER_ROWID           INT    NOT NULL," \
       "ANIMAL_ROWID         INT    NOT NULL," \
-      "FOREIGN KEY (USER_ROWID) REFERENCES users(rowid)" \ 
-      "FOREIGN KEY (ANIMAL_ROWID) REFERENCES animals(rowid)" \
+      "FOREIGN KEY (USER_ROWID) REFERENCES users(id)" \ 
+      "FOREIGN KEY (ANIMAL_ROWID) REFERENCES animals(id)" \
        "); \
        ";
 
     rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
    
     if( rc != SQLITE_OK ){
+        std::cout << zErrMsg << std::endl;
         return false;
     }
 
@@ -51,11 +54,11 @@ bool SQLite3DB::create_tables(){
 }
 
 void SQLite3DB::populate_tables(){
-    std::string sql = "INSERT INTO users VALUES("  \
+    std::string sql = "INSERT INTO users (name, cpf, email, phone_number, address, gender, password) VALUES("  \
         "'Douglas', '10191817188', 'oi@oi.com', '83788363927', 'daushdouasdn', 'M', 'TESTE'" \
         ");" \
-        "INSERT INTO animals VALUES("  \
-        "'Douglinhas', 'Cachorro', 'Preto', '3', '1', '4'" \
+        "INSERT INTO animals (name, type, color, age, height, weight, user_rowid) VALUES("  \
+        "'Douglinhas', 'Cachorro', 'Preto', '3', '1', '4', '1'" \
         ");" ;
 
     rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
@@ -73,7 +76,8 @@ SQLite3DB::SQLite3DB(){
     } else {
         std::cout << "Abriu o banco com sucesso!" << std::endl;
     }
-    populate_tables();
+    // create_tables();
+    // populate_tables();
 }
 
 // Method necessary for sqlite3.h returns
@@ -236,7 +240,7 @@ std::vector< std::map<std::string, std::string> > SQLite3DB::get_where(std::stri
 
     std::string sql = "SELECT * FROM " + table_name + 
     conditions_data +
-    "WHERE " + update_data;
+    " WHERE " + update_data;
     ;
 
     rc = sqlite3_exec(db, sql.c_str(), index_callback, (void*)data, &zErrMsg);

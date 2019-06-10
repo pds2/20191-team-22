@@ -34,7 +34,7 @@ std::vector<Animal> Animal::index(){
 
     for (std::map<std::string, std::string> animal_data : animals_data){
         Animal animal(
-            std::stoi(animal_data["row_id"]),
+            std::stoi(animal_data["ID"]),
             animal_data["NAME"],
             animal_data["TYPE"],
             animal_data["COLOR"],
@@ -53,7 +53,7 @@ Animal Animal::get(int id){
     std::map<std::string, std::string> animal_data = _db.get(ANIMALS_TABLE_NAME, id);
 
     Animal animal(
-        std::stoi(animal_data["row_id"]),
+        std::stoi(animal_data["ID"]),
         animal_data["NAME"],
         animal_data["TYPE"],
         animal_data["COLOR"],
@@ -97,7 +97,7 @@ std::vector<User> Animal::show_interested(){
     std::vector< std::map<std::string, std::string> > adopters_vector = _db.get_where(USERS_TABLE_NAME, conditions, join_conditions);
 
     for (std::map<std::string, std::string> adopter_data : adopters_vector){
-        User adopter = User::get(std::stoi(adopter_data["iod"]));
+        User adopter = User::get(std::stoi(adopter_data["ID"]));
 
         interested.push_back(adopter);
     }

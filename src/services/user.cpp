@@ -62,7 +62,7 @@ std::vector<User> User::index(){
 
     for (std::map<std::string, std::string> user_data : users_data){
         User user(
-            std::stoi(user_data["row_id"]),
+            std::stoi(user_data["id"]),
             user_data["NAME"],
             user_data["CPF"],
             user_data["EMAIL"],
@@ -122,13 +122,17 @@ bool User::login(std::string email, std::string password){
 std::vector<Animal> User::animals(){
     std::vector<Animal> animals;
     std::map<std::string, std::string> helper_map;
-    helper_map["USER_ROWID"] = this->_id;
+    helper_map["USER_ROWID"] = std::to_string(this->_id);
 
     // Return user animals in map form
     std::vector< std::map<std::string, std::string> > helper_vector = _db.get_where(ANIMALS_TABLE_NAME, helper_map);
 
     for(std::map<std::string, std::string> map : helper_vector){
-        animals.push_back(Animal::get(std::stoi(map["id"])));
+        if (map["ERROR"] != "")
+            break;
+
+        Animal animal = Animal::get(std::stoi(map["ID"]));
+        animals.push_back(animal);
     }
 
     return animals;
