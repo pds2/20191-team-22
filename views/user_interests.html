@@ -7,13 +7,46 @@
     <title>Meus Interesses</title>
 </head>
 <body>
-    [[_user_interest]]
+    <div class="interested-wrapper">
+        [[_user_interest]]
+    </div>
 </body>
 <style>
-    body {
+    body{
         background-color: lightseagreen;
     }
 
-    
+    .interested-wrapper{
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        position: relative;
+        margin: 0 auto;
+        max-width: 80%;
+    }
+    .user-interest{
+        display: flex;
+        align-items: center;
+        padding-left: 1em;
+        height: 4em;
+        width: 47%;
+        background-color: white;
+        border: solid 1px grey;
+        margin: .5em 0;
+        transition: .5s;
+    }
+    .interested-user:hover{
+        transform: scale(1.2);
+        box-shadow: -2px 9px 20px 0px black;
+        cursor: pointer;
+    }
+    .user-interest span{
+        margin: 0 .7em;
+    }
+    .animal-name{
+        font-family: 'Courier New', Courier, monospace;
+        text-transform: capitalize;
+        text-decoration-line: underline;
+    } 
 </style>
 </html>
