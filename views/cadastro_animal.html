@@ -4,9 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Cadastrar animal</title>
 </head>
 <body>
     
 </body>
+</html>
+
+<html>
+    <head>
+        <title>
+            Cadastro
+        </title>
+        <meta charset='UTF-8'>
+    </head>
+    <body>
+        <h1>
+            <form method="post" action="index.html" > <!-- enctype='multipart/form-data' -->
+                <input type="hidden" name="rowid" value="1">
+                <label for="NAME">Nome</label>
+                <input type="text" name="name">
+                <br>
+                <label for="TYPE">Tipo</label>
+                <input type="text" name="type">
+                <br><br>
+                <input type="submit" value="Submit">
+                <input name="put" type="hidden" value="true">
+                <input name="class_name" type="hidden" value="animal">
+            </form> 
+        </h1>
+    </body>
 </html>
