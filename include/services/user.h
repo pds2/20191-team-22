@@ -46,6 +46,7 @@ public:
     
     std::vector<Animal> animals();
     std::vector<Animal> liked_animals();
+    std::vector<Animal> remaining_animals();
     std::map<std::string, std::string> to_map();
 };
 

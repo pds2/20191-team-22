@@ -21,7 +21,6 @@
     <body>
         <h1>
             <form method="post" action="index.html" > <!-- enctype='multipart/form-data' -->
-                <input type="hidden" name="user_rowid" value="1">
                 <label for="NAME">Nome</label>
                 <input type="text" name="name">
                 <br>
@@ -39,6 +38,9 @@
                 <br>
                 <label for="WEIGHT">Peso</label>
                 <input type="number" name="weight" step="0.01" min="0">
+                <br>
+                <label for="USER_ROWID">ID do dono</label>
+                <input type="number" name="user_rowid" min="0">
                 <br>
                 <input type="submit" value="Submit">
                 <input name="class_name" type="hidden" value="animal">

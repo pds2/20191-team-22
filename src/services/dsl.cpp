@@ -21,7 +21,7 @@ std::string DSL::route(std::string string, std::string route, std::string id){
             std::vector<std::map<std::string, std::string> > objectsToMap;
             User user = User::get(std::stoi(id));
 
-            animals = Animal::index();
+            animals = user.remaining_animals();
 
             for(Animal animal : animals)
                 objectsToMap.push_back(animal.to_map());
@@ -54,6 +54,7 @@ std::string DSL::route(std::string string, std::string route, std::string id){
             objArr["_interested_user"] = objectsToMap;
             string = parsePartials(string, objArr);
         }
+        
         if(route == "user_interests") {
             std::map<std::string, std::vector<std::map<std::string, std::string> > > objArr;
             std::vector<Animal> animals;
@@ -62,8 +63,11 @@ std::string DSL::route(std::string string, std::string route, std::string id){
 
             animals = user.liked_animals();
 
-            for(Animal animal : animals)
-                objectsToMap.push_back(animal.to_map());
+            for(Animal animal : animals){
+                std::map<std::string, std::string> helper_map = animal.to_map();
+                helper_map["USER_NAME"] = User::get(std::stoi(helper_map["USER_ROWID"])).get_name();
+                objectsToMap.push_back(helper_map);
+            }
             
             objArr["_user_interest"] = objectsToMap;
             string = parsePartials(string, objArr);

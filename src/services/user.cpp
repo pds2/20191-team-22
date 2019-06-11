@@ -172,3 +172,20 @@ std::map<std::string, std::string> User::to_map(){
 
     return attribute_map;
 }
+
+std::vector<Animal> User::remaining_animals(){
+    std::vector<Animal> animals;
+    std::map<std::string, std::string> helper_map;
+    helper_map["ID"] = "(SELECT animal_rowid FROM interests WHERE user_rowid = " + std::to_string(this->_id) + ")";
+
+    std::vector< std::map<std::string, std::string> > helper_vector = _db.where_in(ANIMALS_TABLE_NAME, helper_map);
+    for(std::map<std::string, std::string> map : helper_vector){
+        if (map["ERROR"] != "")
+            break;
+
+        Animal animal = Animal::get(std::stoi(map["ID"]));
+        animals.push_back(animal);
+    }
+
+    return animals;
+}
