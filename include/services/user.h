@@ -45,6 +45,7 @@ public:
     static bool login(std::string email, std::string password);
     
     std::vector<Animal> animals();
+    std::vector<Animal> liked_animals();
     std::map<std::string, std::string> to_map();
 };
 

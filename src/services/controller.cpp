@@ -181,7 +181,11 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
     bool result;
 
     // Check which class to be created
-    if (class_name == std::string("animal")){
+    if (route == "/login"){
+        std::string username = std::regex_replace(body["username"], std::regex("\\%40"), "@");
+        result = User::login(username, body["password"]);
+    }
+    else if (class_name == std::string("animal")){
         result = Animal::create(body);
     } 
     else if (class_name == std::string("user")){
@@ -194,12 +198,15 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
     }
 
     if (result){
-        std::cout << "Interesse do Animal de ID " << body["animal_rowid"] << " com usuário de ID " << body["user_rowid"] << " criado com sucesso!" << std::endl;
-        std::string response = "HTTP/1.1 200 OK";
-        const char *cstr = response.c_str();
-        write(socket , cstr , response.length());
+        if (route == "/login"){
+            get("/", socket, "200 OK");
+        }
+        else{
+            std::string response = "HTTP/1.1 200 OK";
+            const char *cstr = response.c_str();
+            write(socket , cstr , response.length());
+        }
     } else {
-        std::cout << "Não foi possível excluir o animal de ID " << body["id"] << std::endl;
         get("/500.html", socket, "500 Internal Server Errors");
     }
 }
