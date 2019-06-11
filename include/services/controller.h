@@ -19,6 +19,8 @@ class Controller {
 
         // Server redirect and method handling
         std::string build_response(std::string status, std::ifstream &file, std::string route = "", std::string id = "");
+        std::map<std::string, std::string> parse_headers(std::string buffer);
+        std::map<std::string, std::string> parse_cookies(std::string buffer);
         void handle_method(std::string method, int socket, std::string filename, const char *buffer);
         static std::map<std::string, std::string> get_body(std::string buffer);
         void RouteRedirect(std::string route, std::map<std::string,std::string> body);
