@@ -18,7 +18,7 @@
 #define USERS_TABLE_NAME "users"
 #define USERS_TABLE_JOIN_ATTRIBUTE "id"
 
-Animal::Animal(int id, std::string name, std::string type, std::string color, int age, float height, float weight){
+Animal::Animal(int id, std::string name, std::string type, std::string color, int age, float height, float weight, int user_id){
     _id = id;
     _name = name;
     _type = type;
@@ -26,6 +26,7 @@ Animal::Animal(int id, std::string name, std::string type, std::string color, in
     _age = age;
     _height = height;
     _weight = weight;
+    _user_id = user_id;
 }
 
 std::vector<Animal> Animal::index(){
@@ -41,7 +42,8 @@ std::vector<Animal> Animal::index(){
             animal_data["COLOR"],
             std::stoi(animal_data["AGE"]),
             std::stof(animal_data["HEIGHT"]),
-            std::stof(animal_data["WEIGHT"])
+            std::stof(animal_data["WEIGHT"]),
+            std::stoi(animal_data["USER_ROWID"])
         );
 
         animals.push_back(animal);
@@ -60,7 +62,8 @@ Animal Animal::get(int id){
         animal_data["COLOR"],
         std::stoi(animal_data["AGE"]),
         std::stof(animal_data["HEIGHT"]),
-        std::stof(animal_data["WEIGHT"])
+        std::stof(animal_data["WEIGHT"]),
+        std::stoi(animal_data["USER_ROWID"])
     );
 
     return animal;
@@ -119,6 +122,7 @@ std::map<std::string, std::string> Animal::to_map(){
     attribute_map["AGE"] = std::to_string(this->_age);
     attribute_map["HEIGHT"] = std::to_string(this->_height);
     attribute_map["WEIGHT"] = std::to_string(this-> _weight);
+    attribute_map["USER_ROWID"] = std::to_string(this->_user_id);
 
     return attribute_map;
 }

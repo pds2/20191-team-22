@@ -19,10 +19,11 @@ private:
     int _age;
     float _height;
     float _weight;
+    int _user_id;
 
 public:
     static SQLite3DB _db;
-    Animal(int id, std::string name, std::string type, std::string color, int age, float height, float weigth);
+    Animal(int id, std::string name, std::string type, std::string color, int age, float height, float weight, int user_id);
 
     static std::vector<Animal> index();
     static Animal get(int id);
