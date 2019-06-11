@@ -10,7 +10,7 @@
     <div class="login-wrapper">
         <span>LOGIN</span>
         <div class="login-form">
-            <form action="/login" method="POST">
+            <form action="/login" method="POST" onsubmit="checkLogin(event)">
                 <label for="username">usuário</label>
                 <input type="text" name="username" placeholder="username">
 
@@ -88,4 +88,29 @@
         cursor: pointer;
     }
 </style>
+<script>
+function checkLogin(event){
+    event.preventDefault();
+    var form = event.target;
+    var username = form.querySelector("input[name=username]");
+    var password = form.querySelector("input[name=password]");
+
+    let xml = new XMLHttpRequest();
+        xml.open("POST", "/login");
+        xml.send(`username=${username.value}&password=${password.value}`);
+        console.log(xml);
+        // if(xml.response){
+            console.log(xml.response);
+            setCookie("logged_in", "true", 1);
+            setCookie("user_id", "true", 1);
+        // }
+}
+
+function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires=" + d.toGMTString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+</script>
 </html>

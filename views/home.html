@@ -11,10 +11,18 @@
         [[_animals_to_adoption]]
     </div>
     <div class="side-buttons">
-        <a href="/home" class="home">HOME</a>
-        <a href="/profile" class="profile">Meu perfil</a>
-        <a href="/user_interests" class="my_interests">Meus interesses</a>
-        <a href="/interested_users" class="interested">Animais com interesse</a>
+        <a href="/home" class="home">
+            <span>HOME</span>
+        </a>
+        <a href="/profile" class="profile">
+            <span>Meu perfil</span>
+        </a>
+        <a href="/user_interests" class="my_interests">
+            <span>Meus interesses</span>
+        </a>
+        <a href="/interested_users" class="interested">
+            <span>Animais com interesse</span>
+        </a>
     </div>
 </body>
 <style>
@@ -74,6 +82,40 @@
         fill: white;
     }
 
+    .side-buttons{
+        position: fixed;
+        z-index: 5;
+        bottom: 3em;
+        left: 2em;
+        display: flex;
+        flex-flow: column;
+    }
+    .side-buttons span{
+        transform: scale(0);
+        transition: .4s;
+        font-family: monospace;
+        text-align: center;
+    }
+    .side-buttons a{
+        width: 4em;
+        height: 4em;
+        border-radius: 50px;
+        background-color: #02b629;
+        margin: .7em 0;
+        box-shadow: -9px 2px 20px 4px #00000070;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        transition: .6s;
+    }
+    .side-buttons a:hover{
+        width: 10em;
+    }
+    .side-buttons a:hover span{
+        transform: scale(1);
+    }
+
+
     .liked{
         animation: liked .5s forwards ease-in;
     }
@@ -88,8 +130,9 @@
 
 </style>
 <script>
-    setCookie('user_id', '37', 1);
-    let user_id = getCookie("user_id");
+    // setCookie('user_id', '37', 1);
+    // let user_id = getCookie("user_id");
+    let user_id = 1;
     function likeAnimal(id, tag){
         var element = document.querySelector(`[${tag}]`);
         element.classList.add("liked");

@@ -109,9 +109,9 @@ std::map<std::string, std::string> Controller::parse_headers(std::string buffer)
         buffer = matches.suffix().str();
     }
 
-    for (std::pair<std::string, std::string> header : headers){
-        std::cout << "header: " << header.first << " -> value: " << header.second << std::endl;
-    }
+    // for (std::pair<std::string, std::string> header : headers){
+    //     std::cout << "header: " << header.first << " -> value: " << header.second << std::endl;
+    // }
 
     return headers;
 }
@@ -130,9 +130,9 @@ std::map<std::string, std::string> Controller::parse_cookies(std::string cookies
         cookies_str = matches.suffix().str();
     }
 
-    for (std::pair<std::string, std::string> cookie : cookies){
-        std::cout << "cookie: " << cookie.first << " -> value: " << cookie.second << std::endl;
-    }
+    // for (std::pair<std::string, std::string> cookie : cookies){
+    //     std::cout << "cookie: " << cookie.first << " -> value: " << cookie.second << std::endl;
+    // }
 
     return cookies;
 }
@@ -145,8 +145,6 @@ void Controller::handle_method(std::string method, int socket, std::string route
     }else if (method == "POST"){
         post(route, buff, socket);
 
-    }else if (method == "PUT"){
-        //patch();
     }
 }
 
@@ -202,17 +200,29 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
 
     if (result){
         if (route == "/login"){
-            get("/", socket, "200 OK");
+            std::string response = "HTTP/1.1 200 OK\nContent-Type: application/json\nContent-Length: ";
+            std::string json = "{\"user_id\":\"1\"}";
+            response.append(std::to_string(json.length()));
+            response.append("\n\n");
+            response.append(json);
+            const char *cstr = response.c_str();
+            write(socket , cstr , response.length());
+            // get("/", socket, "200 OK");
         }
         if (route == "/signup"){
             get("/", socket, "200 OK");
-        }
-        else{
+        }else{
             std::string response = "HTTP/1.1 200 OK";
             const char *cstr = response.c_str();
             write(socket , cstr , response.length());
         }
     } else {
+        if(route == "/login"){
+            std::string response = "HTTP/1.1 401 Unauthorized";
+            const char *cstr = response.c_str();
+            write(socket , cstr , response.length());
+            return;
+        }
         get("/500.html", socket, "500 Internal Server Errors");
     }
 }

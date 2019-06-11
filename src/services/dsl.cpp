@@ -138,7 +138,6 @@ std::string DSL::parsePartials(std::string string, std::map<std::string, std::ve
 
         res += matches.prefix().str();
         for(std::map<std::string, std::string> object : objArr[matches.str(1)]){
-            std::cout << matches.str(1) << std::endl;
             partial.open("views/" + matches.str(1) + ".html");
             if (!partial) {
                 // Error handling
