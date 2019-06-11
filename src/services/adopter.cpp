@@ -32,7 +32,7 @@ std::vector<Animal> Adopter::show_interests(){
 
     std::map<std::string, std::string> interests_join_conditions;
 
-    conditions["interests.users_rowid"] = this->_id;
+    conditions["interests.users_rowid"] = std::to_string(this->_id);
     
     // JOIN interests ON interests.user_rowid = users.rowid 
     interests_join_conditions["join_table_name"] = INTERESTS_TABLE_NAME;
