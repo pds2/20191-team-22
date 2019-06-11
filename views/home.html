@@ -11,10 +11,10 @@
         [[_animals_to_adoption]]
     </div>
     <div class="side-buttons">
-        <a href="javascript:void(0);" class="home"></a>
-        <a href="javascript:void(0);" class="profile"></a>
-        <a href="javascript:void(0);" class="my_interests"></a>
-        <a href="javascript:void(0);" class="interested"></a>
+        <a href="/home" class="home">HOME</a>
+        <a href="/profile" class="profile">Meu perfil</a>
+        <a href="/user_interests" class="my_interests">Meus interesses</a>
+        <a href="/interested_users" class="interested">Animais com interesse</a>
     </div>
 </body>
 <style>
@@ -88,7 +88,7 @@
 
 </style>
 <script>
-    setCookie('user_id', '1', 1);
+    setCookie('user_id', '37', 1);
     let user_id = getCookie("user_id");
     function likeAnimal(id, tag){
         var element = document.querySelector(`[${tag}]`);

@@ -21,7 +21,7 @@ std::string DSL::route(std::string string, std::string route, std::string id){
             std::vector<std::map<std::string, std::string> > objectsToMap;
             User user = User::get(std::stoi(id));
 
-            animals = user.animals();
+            animals = Animal::index();
 
             for(Animal animal : animals)
                 objectsToMap.push_back(animal.to_map());
@@ -29,12 +29,46 @@ std::string DSL::route(std::string string, std::string route, std::string id){
             objArr["_animals_to_adoption"] = objectsToMap;
             string = parsePartials(string, objArr);
         }
+
         if(route == "profile") {
             User user = User::get(std::stoi(id));
             string = parse(string, user.to_map());
         }
-        if(route == "interested_users") {}
-        if(route == "user_interests") {}
+
+        if(route == "interested_users") {
+            std::map<std::string, std::vector<std::map<std::string, std::string> > > objArr;
+            std::vector<Animal> animals;
+            std::vector<std::map<std::string, std::string> > objectsToMap;
+            User user = User::get(std::stoi(id));
+            animals = user.animals();
+
+            std::vector<User> interested_users;
+
+            for(Animal animal : animals){
+                std::vector<User> aux_vector;
+                for(User user : animal.show_interested()){
+                    objectsToMap.push_back(user.to_map());
+                }
+            }
+
+            objArr["_interested_user"] = objectsToMap;
+            string = parsePartials(string, objArr);
+        }
+        if(route == "user_interests") {
+            std::map<std::string, std::vector<std::map<std::string, std::string> > > objArr;
+            std::vector<Animal> animals;
+            std::vector<std::map<std::string, std::string> > objectsToMap;
+            User user = User::get(std::stoi(id));
+
+            animals = user.liked_animals();
+
+            for(Animal animal : animals)
+                objectsToMap.push_back(animal.to_map());
+            
+            objArr["_user_interest"] = objectsToMap;
+            string = parsePartials(string, objArr);
+        }
+        
         if(route == "") {}
         if(route == "") {}
         if(route == "") {}

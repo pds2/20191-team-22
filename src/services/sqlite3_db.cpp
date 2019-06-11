@@ -76,8 +76,8 @@ SQLite3DB::SQLite3DB(){
     } else {
         std::cout << "Abriu o banco com sucesso!" << std::endl;
     }
-    create_tables();
-    populate_tables();
+    // create_tables();
+    // populate_tables();
 }
 
 // Method necessary for sqlite3.h returns
@@ -232,7 +232,7 @@ std::vector< std::map<std::string, std::string> > SQLite3DB::get_where(std::stri
     // Format join data
     for(std::map<std::string, std::string> map : join_conditions){
         conditions_data.append(
-            "JOIN " + map["join_table_name"] + " ON " +
+            " JOIN " + map["join_table_name"] + " ON " +
             map["join_table_name"] + "." + map["join_table_attribute"] +
             " = " + 
             map["source_table_name"] + "." + map["source_table_attribute"] + " "

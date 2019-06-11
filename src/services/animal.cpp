@@ -10,12 +10,13 @@
 #include <map>
 
 #define ANIMALS_TABLE_NAME "animals"
-#define ANIMALS_TABLE_JOIN_ATTRIBUTE "rowid"
+#define ANIMALS_TABLE_JOIN_ATTRIBUTE "id"
 
 #define INTERESTS_TABLE_NAME "interests"
-#define INTERESTS_TABLE_JOIN_ATTRIBUTE "animal_rowid"
+#define INTERESTS_TABLE_JOIN_ATTRIBUTE "user_rowid"
 
 #define USERS_TABLE_NAME "users"
+#define USERS_TABLE_JOIN_ATTRIBUTE "id"
 
 Animal::Animal(int id, std::string name, std::string type, std::string color, int age, float height, float weight){
     _id = id;
@@ -89,14 +90,17 @@ std::vector<User> Animal::show_interested(){
     // JOIN interests ON interests.animal_rowid = animals.rowid 
     interests_join_conditions["join_table_name"] = INTERESTS_TABLE_NAME;
     interests_join_conditions["join_table_attribute"] = INTERESTS_TABLE_JOIN_ATTRIBUTE;
-    interests_join_conditions["source_table_name"] = ANIMALS_TABLE_NAME;
-    interests_join_conditions["source_table_attribute"] = ANIMALS_TABLE_JOIN_ATTRIBUTE;
+    interests_join_conditions["source_table_name"] = USERS_TABLE_NAME;
+    interests_join_conditions["source_table_attribute"] = USERS_TABLE_JOIN_ATTRIBUTE;
 
     join_conditions.push_back(interests_join_conditions);
 
     std::vector< std::map<std::string, std::string> > adopters_vector = _db.get_where(USERS_TABLE_NAME, conditions, join_conditions);
 
     for (std::map<std::string, std::string> adopter_data : adopters_vector){
+        for (std::pair<std::string, std::string> pair : adopter_data){
+            std::cout << pair.first << " |||||| " << pair.second << std::endl;
+        }
         User adopter = User::get(std::stoi(adopter_data["ID"]));
 
         interested.push_back(adopter);
