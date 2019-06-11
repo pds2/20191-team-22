@@ -14,6 +14,7 @@
 #include <regex>
 #include <map>
 
+/// This methods parses cookies, headers and route of the HTTP call
 void Controller::handle_request(const char *buffer, int socket){
     std::string buff(buffer);
     std::cout << buff << std::endl;
@@ -23,11 +24,11 @@ void Controller::handle_request(const char *buffer, int socket){
     headers = parse_headers(buff);
     cookies = parse_cookies(headers["Cookie"]);
 
-    // HTTP method
+    /// HTTP method
     iss >> buff;
     std::string http_method = buff;
 
-    // Route
+    /// Route
     iss >> buff;
     std::string route = buff;
 
@@ -37,6 +38,7 @@ void Controller::handle_request(const char *buffer, int socket){
     close(socket);
 }
 
+/// Handles actions for GET HTTP methods
 void Controller::get(std::string route, int socket, std::string status){
     std::regex parseRoute ("[\\/](\\w+)[\\/]?(\\d+)?");
     std::smatch matches;
@@ -44,13 +46,13 @@ void Controller::get(std::string route, int socket, std::string status){
     std::string id;
 
     std::cout << route << std::endl;
-    // Route parsing
+    /// Route parsing
     std::regex_search(route, matches, parseRoute);
     route = matches.str(1);
     id = matches.str(2);
 
     std::cout << route + " -- " << id << std::endl;
-    // Routes defaults
+    /// Routes defaults
     if(route == "favicon")
         return;
 
@@ -61,7 +63,7 @@ void Controller::get(std::string route, int socket, std::string status){
     file.open("views/" + route + ".html");
     
     if (!file) {
-        // Error handling
+        /// Error handling
         std::cout << "Unable to open file" << std::endl;
         file.open("views/404.html");
         response = build_response("404 Not Found" , file);
@@ -73,6 +75,7 @@ void Controller::get(std::string route, int socket, std::string status){
     write(socket , cstr , response.length());
 }
 
+/// Builds the response made in handle_request(). Redirects to correct file.
 std::string Controller::build_response(std::string status, std::ifstream &file, std::string route, std::string id){
     // Common HTML Header content
     std::string res = "HTTP/1.1"+ status +"\nContent-Type: text/html\nContent-Length: ";
@@ -95,6 +98,7 @@ std::string Controller::build_response(std::string status, std::ifstream &file, 
     return res;
 }
 
+/// Parse HTTP content Headers.
 std::map<std::string, std::string> Controller::parse_headers(std::string buffer){
     std::regex reg ("(.*):\\s+(.*)");
     std::smatch matches;
@@ -116,6 +120,7 @@ std::map<std::string, std::string> Controller::parse_headers(std::string buffer)
     return headers;
 }
 
+/// Parse cookies to configure and maintain session.
 std::map<std::string, std::string> Controller::parse_cookies(std::string cookies_str){
     std::regex reg ("(\\w+)=(\\w+);?");
     std::smatch matches;
@@ -137,6 +142,7 @@ std::map<std::string, std::string> Controller::parse_cookies(std::string cookies
     return cookies;
 }
 
+/// Checks which HTTP methods needs to be used
 void Controller::handle_method(std::string method, int socket, std::string route, const char *buffer){
     std::string buff(buffer);
     if(method == "GET"){
@@ -150,6 +156,7 @@ void Controller::handle_method(std::string method, int socket, std::string route
     }
 }
 
+/// Differentiate actions when HTTP method POST gets called
 void Controller::post(std::string route, std::string buffer, int socket){
     static std::map<std::string, std::string> body;
     body.clear();
@@ -169,6 +176,7 @@ void Controller::post(std::string route, std::string buffer, int socket){
     }
 }
 
+/// Called when a HTTP POST is called and no other HTTP params are set.
 void Controller::create(std::string route, std::string buffer, std::map<std::string, std::string> body, int socket){
     // get(route, socket, "201 Created");
     std::string class_name = body["class_name"];
@@ -217,6 +225,7 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
     }
 }
 
+/// Called when a HTTP POST is called and HTTP param DESTROY is set.
 void Controller::destroy(std::string route, std::string buffer, std::map<std::string, std::string> body, int socket){
     // get(route, socket, "201 Created");
     std::string class_name = body["class_name"];
@@ -241,6 +250,7 @@ void Controller::destroy(std::string route, std::string buffer, std::map<std::st
     }
 }
 
+/// Called when a HTTP POST is called and HTTP param PUT is set.
 void Controller::update(std::string route, std::string buffer, std::map<std::string, std::string> body, int socket){
     // get(route, socket, "201 Created");
     std::string class_name = body["class_name"];
