@@ -11,13 +11,24 @@
         <span>CADASTRO</span>
         <div class="signup-form">
             <form id="signup-form" action="/signup" method="POST" onsubmit="checkPassword(event)">
-                <label for="username">usuário</label>
-                <input type="text" name="username" placeholder="username">
+                <input type="hidden" name="class_name" value="user">
+                <label for="name">Nome</label>
+                <input type="text" name="name" placeholder="Nome">
+                <label for="cpf">CPF</label>
+                <input type="text" name="cpf" placeholder="cpf">
+                <label for="phone_number">Número de telefone</label>
+                <input type="text" name="phone_number" placeholder="phone_number">
+                <label for="address">Endereço</label>
+                <input type="text" name="address" placeholder="address">
+                <label for="gender">Gênero</label>
+                <input type="text" name="gender"  placeholder="M ou F">
+                <label for="email">Email</label>
+                <input type="text" name="email" placeholder="Email">
 
                 <label for="password">senha</label>
-                <input type="password" name="password" placeholder="password">
+                <input type="password" name="password" placeholder="Senha">
                 <label for="password_confirmation">confirmação de senha</label>
-                <input type="password" name="password_confirmation" placeholder="password confirmation">
+                <input type="password" name="password_confirmation" placeholder="Confirmação de senha">
                 <button type="submit">CADASTRAR</button>
             </form>
         </div>

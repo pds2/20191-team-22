@@ -172,6 +172,7 @@ bool SQLite3DB::create(std::string table_name, std::map<std::string, std::string
     std::string sql = "INSERT INTO " + table_name + 
     "(" + column_data + ") VALUES (" + values_data + ");";
 
+    std::cout << sql << std::endl;
     rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
     if( rc != SQLITE_OK ){
         return false;

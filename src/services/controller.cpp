@@ -143,6 +143,9 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
         result = Animal::create(body);
     } 
     else if (class_name == std::string("user")){
+        std::string email = std::regex_replace(body["email"], std::regex("\\%40"), "@");
+        body["email"] = email;
+        body.erase("password_confirmation");
         result = User::create(body);
     }
     else if (class_name == std::string("interest")){
@@ -153,6 +156,9 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
 
     if (result){
         if (route == "/login"){
+            get("/", socket, "200 OK");
+        }
+        if (route == "/signup"){
             get("/", socket, "200 OK");
         }
         else{
