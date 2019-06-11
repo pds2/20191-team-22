@@ -84,7 +84,7 @@ std::vector<User> Animal::show_interested(){
 
     std::map<std::string, std::string> interests_join_conditions;
 
-    conditions["interests.animal_rowid"] = this->_id;
+    conditions["interests.animal_rowid"] = std::to_string(this->_id);
     
     // JOIN interests ON interests.animal_rowid = animals.rowid 
     interests_join_conditions["join_table_name"] = INTERESTS_TABLE_NAME;
@@ -108,13 +108,13 @@ std::vector<User> Animal::show_interested(){
 std::map<std::string, std::string> Animal::to_map(){
     std::map<std::string, std::string> attribute_map;
 
-    attribute_map["ID"] = this->_id;
+    attribute_map["ID"] = std::to_string(this->_id);
     attribute_map["NAME"] = this->_name;
     attribute_map["TYPE"] = this->_type;
     attribute_map["COLOR"] = this->_color;
-    attribute_map["AGE"] = this->_age;
-    attribute_map["HEIGHT"] = this->_height;
-    attribute_map["WEIGHT"] = this-> _weight;
+    attribute_map["AGE"] = std::to_string(this->_age);
+    attribute_map["HEIGHT"] = std::to_string(this->_height);
+    attribute_map["WEIGHT"] = std::to_string(this-> _weight);
 
     return attribute_map;
 }

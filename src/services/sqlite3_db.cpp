@@ -76,8 +76,8 @@ SQLite3DB::SQLite3DB(){
     } else {
         std::cout << "Abriu o banco com sucesso!" << std::endl;
     }
-    // create_tables();
-    // populate_tables();
+    create_tables();
+    populate_tables();
 }
 
 // Method necessary for sqlite3.h returns

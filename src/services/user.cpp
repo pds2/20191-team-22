@@ -143,7 +143,7 @@ std::vector<Animal> User::animals(){
 std::map<std::string, std::string> User::to_map(){
     std::map<std::string, std::string> attribute_map;
 
-    attribute_map["ID"] = this->_id;
+    attribute_map["ID"] = std::to_string(this->_id);
     attribute_map["NAME"] = this->_name;
     attribute_map["CPF"] = this->_cpf;
     attribute_map["EMAIL"] = this->_email;
