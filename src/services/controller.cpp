@@ -18,6 +18,10 @@ void Controller::handle_request(const char *buffer, int socket){
     std::string buff(buffer);
     std::cout << buff << std::endl;
     std::istringstream iss(buff);
+    std::map<std::string, std::string> headers;
+    std::map<std::string, std::string> cookies;
+    headers = parse_headers(buff);
+    cookies = parse_cookies(headers["Cookie"]);
 
     // HTTP method
     iss >> buff;
@@ -89,6 +93,48 @@ std::string Controller::build_response(std::string status, std::ifstream &file, 
     file.close();
 
     return res;
+}
+
+std::map<std::string, std::string> Controller::parse_headers(std::string buffer){
+    std::regex reg ("(.*):\\s+(.*)");
+    std::smatch matches;
+    std::map<std::string, std::string> headers;
+
+    while(std::regex_search(buffer, matches, reg)){
+        
+        headers[matches.str(1)] = matches.str(2); 
+        
+        // Eliminate the previous match and create
+        // a new string to search
+        buffer = matches.suffix().str();
+    }
+
+    for (std::pair<std::string, std::string> header : headers){
+        std::cout << "header: " << header.first << " -> value: " << header.second << std::endl;
+    }
+
+    return headers;
+}
+
+std::map<std::string, std::string> Controller::parse_cookies(std::string cookies_str){
+    std::regex reg ("(\\w+)=(\\w+);?");
+    std::smatch matches;
+    std::map<std::string, std::string> cookies;
+
+    while(std::regex_search(cookies_str, matches, reg)){
+        
+        cookies[matches.str(1)] = matches.str(2); 
+        
+        // Eliminate the previous match and create
+        // a new string to search
+        cookies_str = matches.suffix().str();
+    }
+
+    for (std::pair<std::string, std::string> cookie : cookies){
+        std::cout << "cookie: " << cookie.first << " -> value: " << cookie.second << std::endl;
+    }
+
+    return cookies;
 }
 
 void Controller::handle_method(std::string method, int socket, std::string route, const char *buffer){
