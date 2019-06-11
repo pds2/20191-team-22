@@ -11,6 +11,7 @@
 
 #define USERS_TABLE_NAME "users"
 #define ANIMALS_TABLE_NAME "animals"
+#define INTERESTS_TABLE_NAME "interests"
 
 User::User(int id, std::string name, std::string cpf, std::string email, std::string phone_number, std::string address, char gender, std::string password){
     _id = id;
@@ -132,6 +133,23 @@ std::vector<Animal> User::animals(){
             break;
 
         Animal animal = Animal::get(std::stoi(map["ID"]));
+        animals.push_back(animal);
+    }
+
+    return animals;
+}
+
+std::vector<Animal> User::liked_animals(){
+    std::vector<Animal> animals;
+    std::map<std::string, std::string> helper_map;
+    helper_map["USER_ROWID"] = std::to_string(this->_id);
+
+    std::vector< std::map<std::string, std::string> > helper_vector = _db.get_where(INTERESTS_TABLE_NAME, helper_map);
+    for(std::map<std::string, std::string> map : helper_vector){
+        if (map["ERROR"] != "")
+            break;
+
+        Animal animal = Animal::get(std::stoi(map["ANIMAL_ROWID"]));
         animals.push_back(animal);
     }
 
