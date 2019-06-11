@@ -38,6 +38,7 @@ class SQLite3DB : public SQLite3Interface {
         virtual bool destroy(std::string table_name, int id);
 
         virtual std::vector< std::map<std::string, std::string> > get_where(std::string table_name, std::map<std::string, std::string> conditions, std::vector<std::map<std::string, std::string> > join_conditions = std::vector<std::map<std::string, std::string> >());
+        virtual std::vector< std::map<std::string, std::string> > where_in(std::string table_name, std::map<std::string, std::string> conditions, std::vector<std::map<std::string, std::string> > join_conditions = std::vector<std::map<std::string, std::string> >());
 
         ~SQLite3DB(); 
 };

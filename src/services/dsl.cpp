@@ -21,7 +21,7 @@ std::string DSL::route(std::string string, std::string route, std::string id){
             std::vector<std::map<std::string, std::string> > objectsToMap;
             User user = User::get(std::stoi(id));
 
-            animals = Animal::index();
+            animals = user.remaining_animals();
 
             for(Animal animal : animals)
                 objectsToMap.push_back(animal.to_map());

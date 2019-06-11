@@ -244,6 +244,53 @@ std::vector< std::map<std::string, std::string> > SQLite3DB::get_where(std::stri
     " WHERE " + update_data;
     ;
 
+    std::cout << sql << std::endl;
+
+    rc = sqlite3_exec(db, sql.c_str(), index_callback, (void*)data, &zErrMsg);
+    if( rc != SQLITE_OK ){
+        std::map<std::string, std::string> error_map;
+
+        error_map["ERROR"] = zErrMsg;
+        table_return.index_return_values.push_back(error_map);
+        sqlite3_free(zErrMsg);
+    }
+
+    return table_return.index_return_values;
+}
+
+std::vector< std::map<std::string, std::string> > SQLite3DB::where_in(std::string table_name, std::map<std::string, std::string> conditions, std::vector<std::map<std::string, std::string> > join_conditions){
+    TableReturn &table_return = return_table();
+
+    // Clear previous query
+    table_return.index_return_values.clear();
+
+    std::string update_data = "";
+    std::string conditions_data = "";
+
+    // Format conditions data
+    for (std::pair<std::string,std::string> pair : conditions){
+            update_data.append(pair.first + " NOT IN " + pair.second + " AND ");
+    }
+
+    update_data.erase(update_data.size() - 5, 5);
+
+    // Format join data
+    for(std::map<std::string, std::string> map : join_conditions){
+        conditions_data.append(
+            " JOIN " + map["join_table_name"] + " ON " +
+            map["join_table_name"] + "." + map["join_table_attribute"] +
+            " = " + 
+            map["source_table_name"] + "." + map["source_table_attribute"] + " "
+        );
+    }
+
+    std::string sql = "SELECT * FROM " + table_name + 
+    conditions_data +
+    " WHERE " + update_data;
+    ;
+
+    std::cout << sql << std::endl;
+
     rc = sqlite3_exec(db, sql.c_str(), index_callback, (void*)data, &zErrMsg);
     if( rc != SQLITE_OK ){
         std::map<std::string, std::string> error_map;
