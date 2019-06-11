@@ -26,7 +26,7 @@ std::string DSL::route(std::string string, std::string route, std::string id){
             for(Animal animal : animals)
                 objectsToMap.push_back(animal.to_map());
             
-            objArr["_animals"] = objectsToMap;
+            objArr["_animals_to_adoption"] = objectsToMap;
             string = parsePartials(string, objArr);
         }
         if(route == "profile") {
@@ -38,6 +38,20 @@ std::string DSL::route(std::string string, std::string route, std::string id){
         if(route == "") {}
         if(route == "") {}
         if(route == "") {}
+    }else{
+        if(route == "home"){
+            std::map<std::string, std::vector<std::map<std::string, std::string> > > objArr;
+            std::vector<Animal> animals;
+            std::vector<std::map<std::string, std::string> > objectsToMap;
+            
+            animals = Animal::index();
+
+            for(Animal animal : animals)
+                objectsToMap.push_back(animal.to_map());
+            
+            objArr["_animals_to_adoption"] = objectsToMap;
+            string = parsePartials(string, objArr);
+        }
     }
 
     return string;
