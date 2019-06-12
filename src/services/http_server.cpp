@@ -37,8 +37,9 @@ HttpServer::HttpServer(){
         perror("In listen");
         exit(EXIT_FAILURE);
     }
+    std::cout << "Pepe le' Zica's server is up\n--- listening to port: " << PORT << std::endl;
     while(1) {
-        printf("\n+++++++ Waiting for new connection ++++++++\n\n");
+        std::cout << "\n######## Waiting for new connection #########\n" << std::endl;
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)
         {
             perror("In accept");

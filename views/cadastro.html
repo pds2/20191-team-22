@@ -12,24 +12,17 @@
         <div class="signup-form">
             <form id="signup-form" action="/signup" method="POST" onsubmit="checkPassword(event)">
                 <input type="hidden" name="class_name" value="user">
-                <label for="name">Nome</label>
-                <input type="text" name="name" placeholder="Nome">
-                <label for="cpf">CPF</label>
-                <input type="text" name="cpf" placeholder="cpf">
-                <label for="phone_number">Número de telefone</label>
-                <input type="text" name="phone_number" placeholder="phone_number">
-                <label for="address">Endereço</label>
-                <input type="text" name="address" placeholder="address">
-                <label for="gender">Gênero</label>
-                <input type="text" name="gender"  placeholder="M ou F">
-                <label for="email">Email</label>
-                <input type="text" name="email" placeholder="Email">
+                <input class="lg" type="text" name="name" placeholder="Nome">
+                <input class="sm" type="text" name="cpf" placeholder="CPF">
+                <input class="sm" type="text" name="phone_number" placeholder="Telefone">
+                <input class="sm" type="text" name="address" placeholder="Endereço">
+                <input class="sm" type="text" name="gender"  placeholder="M ou F">
+                <input class="lg" type="text" name="email" placeholder="Email">
 
-                <label for="password">senha</label>
-                <input type="password" name="password" placeholder="Senha">
-                <label for="password_confirmation">confirmação de senha</label>
-                <input type="password" name="password_confirmation" placeholder="Confirmação de senha">
-                <button type="submit">CADASTRAR</button>
+                <input class="md" type="password" name="password" placeholder="Senha">
+                <input class="md" type="password" name="password_confirmation" placeholder="Confirmação de senha">
+                <button class="green" type="submit">CADASTRAR</button>
+                <button class="blue" type="button" onclick="redirect('login')">LOGIN</button>
             </form>
         </div>
     </div>
@@ -42,7 +35,7 @@
     .signup-wrapper{
         font-size: 2em;
         position: relative;
-        margin: 0 auto;
+        margin: 1.5em auto;
         display: flex;
         flex-flow: column;
         justify-content: center;
@@ -54,7 +47,7 @@
         border-radius: 10px;
     }
     .signup-wrapper span{
-        margin-bottom: .2em;
+        margin-bottom: .8em;
         letter-spacing: 5px;
         font-family: 'Courier New', Courier, monospace;
         font-size: 2em;
@@ -66,24 +59,22 @@
     }
     .signup-form form{
         display: flex;
-        flex-flow: column;
+        flex-flow: row;
+        flex-wrap: wrap;
         justify-content: space-evenly;
         align-content: center;
         height: 100%;
     }
     .signup-form input{
-        width: 100%;
         height: 2.5em;
-        /* background-color: lightskyblue; */
         border-radius: 10px;
         border: 1px solid gray;
-        padding-left: 1em; 
+        padding-left: 1em;
+        font-family: monospace;
+        margin: .3em 0;
 
     }
-    .signup-form label{
-        font-size: 1em;
-        font-family: monospace;
-    }
+    
     .signup-form button{
         width: 50%;
         align-self: center;
@@ -91,15 +82,21 @@
         color: white;
         border: none;
         border-radius: 10px;
-        margin-top: 1em;
-        background-color: #00ff39;
         transition: .5s;
+        margin: .5em .5em;
     }
     .signup-form button:hover{
         transform: scale(1.3);
         box-shadow: -2px 9px 20px 0px black;
         cursor: pointer;
     }
+
+    .sm{ width: 40%; }
+    .md{ width: 60%; }
+    .lg{ width: 100%; }
+
+    .blue{ background-color: blue; }
+    .green{ background-color: #00ff39; }
 </style>
 
 <script>
@@ -107,13 +104,27 @@
         event.preventDefault();
         let form = document.forms[0];
         let pswd = form.querySelector("input[name=password]");
-        let pswdConf = form.querySelector("input[name=password_confirmation]");
-        console.log({form, pswd, pswdConf});    
-        if(pswd.value === pswdConf.value){
-            form.submit();
-        }else{
+        let pswdConf = form.querySelector("input[name=password_confirmation]");   
+        if(pswd.value !== pswdConf.value){
             alert("As senhas devem corresponder!!!");
+        }else if(checkInputs(form)){
+            alert("Os campos devem ser preenchidos!!");
+        }else{
+            form.submit();
         }
+    }
+
+    function checkInputs(form){
+        let inputs = form.querySelectorAll("input");
+        for(let i = 0; i < inputs.length; i++){
+            if(!inputs[i].value)
+                return true;
+        }
+        return false;
+    }
+
+    function redirect(route){
+        document.location.href = `http://localhost:8080/${route}`;
     }
 </script>
 </html>

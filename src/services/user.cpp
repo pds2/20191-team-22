@@ -107,7 +107,7 @@ bool User::destroy(int id){
     return _db.destroy(USERS_TABLE_NAME, id);
 }
 
-bool User::login(std::string email, std::string password){
+int User::login(std::string email, std::string password){
     std::map<std::string, std::string> user_data;
     user_data["EMAIL"] = email;
     user_data["PASSWORD"] = password;
@@ -115,9 +115,9 @@ bool User::login(std::string email, std::string password){
     std::vector< std::map<std::string, std::string> > data = _db.get_where(USERS_TABLE_NAME, user_data);
 
     if (data.empty()){
-        return false;
+        return 0;
     }
-    return true;
+    return std::stoi(data[0]["ID"]);
 }
 
 std::vector<Animal> User::animals(){

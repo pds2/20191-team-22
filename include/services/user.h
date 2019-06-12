@@ -42,7 +42,7 @@ public:
     static bool update(std::map<std::string, std::string> update_params, int id);
     static bool destroy(int id);
 
-    static bool login(std::string email, std::string password);
+    static int login(std::string email, std::string password);
     
     std::vector<Animal> animals();
     std::vector<Animal> liked_animals();

@@ -11,12 +11,13 @@
         <span>LOGIN</span>
         <div class="login-form">
             <form action="/login" method="POST" onsubmit="checkLogin(event)">
-                <label for="username">usuário</label>
-                <input type="text" name="username" placeholder="username">
+                <label for="email">email</label>
+                <input type="text" name="email" placeholder="email">
 
                 <label for="password">senha</label>
                 <input type="password" name="password" placeholder="password">
-                <button type="submit">LOGIN</button>
+                <button class="green" type="submit">LOGIN</button>
+                <button class="blue" type="button" onclick="redirect('cadastro')">CADASTRE-SE</button>
             </form>
         </div>
     </div>
@@ -29,7 +30,7 @@
     .login-wrapper{
         font-size: 2em;
         position: relative;
-        margin: 0 auto;
+        margin: 3em auto;
         display: flex;
         flex-flow: column;
         justify-content: center;
@@ -79,7 +80,6 @@
         border: none;
         border-radius: 10px;
         margin-top: 1em;
-        background-color: #00ff39;
         transition: .5s;
     }
     .login-form button:hover{
@@ -87,30 +87,43 @@
         box-shadow: -2px 9px 20px 0px black;
         cursor: pointer;
     }
+
+    .blue{ background-color: blue; }
+    .green{ background-color: #00ff39; }
 </style>
 <script>
 function checkLogin(event){
     event.preventDefault();
     var form = event.target;
-    var username = form.querySelector("input[name=username]");
+    var username = form.querySelector("input[name=email]");
     var password = form.querySelector("input[name=password]");
 
     let xml = new XMLHttpRequest();
         xml.open("POST", "/login");
-        xml.send(`username=${username.value}&password=${password.value}`);
-        console.log(xml);
-        // if(xml.response){
-            console.log(xml.response);
-            setCookie("logged_in", "true", 1);
-            setCookie("user_id", "true", 1);
-        // }
+        xml.responseType = "json";
+
+        xml.onreadystatechange = function() { // Call a function when the state changes.
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                // Request finished. Do processing here.
+                let response = xml.response;
+                setCookie("logged_in", "true", 1);
+                setCookie("user_id", response.user_id, 1);
+                document.location.href = "http://localhost:8080/home/" + response.user_id;
+            }
+        }
+
+        xml.send(`email=${username.value}&password=${password.value}`);
 }
 
 function setCookie(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires=" + d.toGMTString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    }
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function redirect(route){
+    document.location.href = `http://localhost:8080/${route}`;
+}
 </script>
 </html>

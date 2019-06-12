@@ -32,9 +32,15 @@ void Controller::handle_request(const char *buffer, int socket){
     iss >> buff;
     std::string route = buff;
 
+    if(cookies["logged_in"] != "true" && route != "/login" && route != "/cadastro" && route != "/signup"){
+        std::string response = "HTTP/1.1 302 Found\nLocation: http://localhost:8080/login";
+         const char *cstr = response.c_str();
+        write(socket , cstr , response.length());
+    }else{
+        handle_method(http_method, socket, route, buffer);
+    }
 
-    handle_method(http_method, socket, route, buffer);
-    printf("------------------Response sent-------------------");
+    printf("\n############## Response sent ##############\n");
     close(socket);
 }
 
@@ -184,11 +190,11 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
     body.erase("delete");
     body.erase("put");
 
-    bool result;
+    int result;
 
     // Check which class to be created
     if (route == "/login"){
-        std::string username = std::regex_replace(body["username"], std::regex("\\%40"), "@");
+        std::string username = std::regex_replace(body["email"], std::regex("\\%40"), "@");
         result = User::login(username, body["password"]);
     }
     else if (class_name == std::string("animal")){
@@ -209,7 +215,10 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
     if (result){
         if (route == "/login"){
             std::string response = "HTTP/1.1 200 OK\nContent-Type: application/json\nContent-Length: ";
-            std::string json = "{\"user_id\":\"1\"}";
+            std::string json = "{\"user_id\":\"";
+            json.append(std::to_string(result) + "\"}");
+            std::cout << json << std::endl;
+
             response.append(std::to_string(json.length()));
             response.append("\n\n");
             response.append(json);
@@ -218,7 +227,7 @@ void Controller::create(std::string route, std::string buffer, std::map<std::str
             // get("/", socket, "200 OK");
         }
         if (route == "/signup"){
-            get("/", socket, "200 OK");
+            get("/", socket, "201 Created");
         }else{
             std::string response = "HTTP/1.1 200 OK";
             const char *cstr = response.c_str();
